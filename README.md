@@ -5,13 +5,13 @@ A recommendation system that gives users suggestions that best match their trave
 </p>
 
 #### Authors
-* 1 Dennis Mwanzia
-* 2 Pamela Owino
-* 3 Joshua Rwanda
-* 4 Nelson Kemboi
-* 5 Pauline Wambui
-* 6 Kane Muendo
-* 7 Ian Macharia
+* Dennis Mwanzia
+* Pamela Owino
+* Joshua Rwanda
+* Nelson Kemboi
+* Pauline Wambui
+* Kane Muendo
+* Ian Macharia
 
 Tourists visiting Africa often struggle to find suitable travel destinations that align with their preferences, making it challenging to plan a satisfying trip within their budget and time constraints. 
 
