@@ -5,13 +5,13 @@ A recommendation system that gives users suggestions that best match their trave
 </p>
 
 #### Authors
-* ![Dennis Mwanzia](https://github.com/DennisMwanzia)
-* ![Pamela Owino](https://github.com/PamelaAwino)
-* ![Joshua Rwanda](https://github.com/R3TR0Quan)
-* ![Nelson Kemboi](https://github.com/nelkemboi)
-* ![Pauline Wambui](https://github.com/paulineKiarie)
-* ![Kane Muendo](https://github.com/kanevundi)
-* ![Ian Macharia](https://github.com/Imacharia)
+* [Dennis Mwanzia](https://github.com/DennisMwanzia)
+* [Pamela Owino](https://github.com/PamelaAwino)
+* [Joshua Rwanda](https://github.com/R3TR0Quan)
+* [Nelson Kemboi](https://github.com/nelkemboi)
+* [Pauline Wambui](https://github.com/paulineKiarie)
+* [Kane Muendo](https://github.com/kanevundi)
+* [Ian Macharia](https://github.com/Imacharia)
 
 ## Introduction
 
