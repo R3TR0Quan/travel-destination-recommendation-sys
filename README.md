@@ -1,7 +1,7 @@
 # Africura Travel Destination Recommendation System
 A recommendation system that gives users suggestions that best match their travel preferences in and around African countries.
 <p>
-    <img src="Data/images/africa-banner.jpg" alt="Banner Image"/>
+    <img src="Data/images/readme_banner.jpg" alt="Banner Image"/>
 </p>
 
 #### Authors
