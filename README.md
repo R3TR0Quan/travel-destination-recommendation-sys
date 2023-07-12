@@ -56,29 +56,29 @@ The goal is to build a machine learning model that can accurately predict hotel 
 We sourced data by scraping destination review data from **TripAdvisor** 
 Here's a breakdown of aome of the main columns we used in coming up with recommendations:
 
-* id: Unique identifier for each item.
-* type: Type of the item.
-* category: Category of the item.
-* subcategories: Subcategories associated with the item.
-* name: Name of the item.
-* rankingPosition: Ranking position of the item.
-* rating: Rating of the item.
-* rawRanking: Raw ranking of the item.
-* addressObj: Address information in object format.
-* latitude: Latitude coordinate of the item's location.
-* longitude: Longitude coordinate of the item's location.
-* rankingString: Ranking information in string format.
-* rankingDenominator: Denominator for the ranking.
-* neighborhoodLocations: Locations of the item in the neighborhood.
-* reviewTags: Tags associated with the reviews.
-* reviews: Reviews of the item.
-* booking: Booking information for the item.
-* subtype: Subtype or specific type of the item.
-* hotelClass: Class or rating of a hotel item.
-* amenities: Amenities available at the item.
-* numberOfRooms: Number of rooms available (for hotels).
-* priceLevel: Price level or range of the item.
-* priceRange: Price range of the item.
+* `id`: Unique identifier for each item.
+* `type`: Type of the item.
+* `category`: Category of the item.
+* `subcategories`: Subcategories associated with the item.
+* `name`: Name of the item.
+* `rankingPosition`: Ranking position of the item.
+* `rating`: Rating of the item.
+* `rawRanking`: Raw ranking of the item.
+* `addressObj`: Address information in object format.
+* `latitude`: Latitude coordinate of the item's location.
+* `longitude`: Longitude coordinate of the item's location.
+* `rankingString`: Ranking information in string format.
+* `rankingDenominator`: Denominator for the ranking.
+* `neighborhoodLocations`: Locations of the item in the neighborhood.
+* `reviewTags`: Tags associated with the reviews.
+* `reviews`: Reviews of the item.
+* `booking`: Booking information for the item.
+* `subtype`: Subtype or specific type of the item.
+* `hotelClass`: Class or rating of a hotel item.
+* `amenities`: Amenities available at the item.
+* `numberOfRooms`: Number of rooms available (for hotels).
+* `priceLevel`: Price level or range of the item.
+* `priceRange`: Price range of the item.
 
 There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
 We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project **writeup**.
