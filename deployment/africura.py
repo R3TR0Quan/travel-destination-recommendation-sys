@@ -9,7 +9,7 @@ def main():
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url('https://github.com/R3TR0Quan/travel-destination-recommendation-sys/tree/main/Data/images/ui_bg.jpg'); /* Enter the path to your background image here */
+            background-image: url('../Data/images/ui_bg.jpg'); /* Updated path to background image */
             background-size: cover;
             background-position: center;
         }
@@ -56,7 +56,9 @@ def main():
         }
         /* Search section styles */
         #search-section {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-image: url('../Data/images/ui_bg.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 20px;
             border-radius: 10px;
             text-align: center;
@@ -64,7 +66,7 @@ def main():
             width: 80%;
             max-width: 600px;
         }
-        input[type="text"] {
+        input[type="number"] { /* Updated input type to number */
             padding: 10px;
             width: 100%;
             margin-bottom: 10px;
@@ -93,7 +95,7 @@ def main():
     st.markdown("<header><h1>Africura Travel Destination Recommendation System</h1></header>", unsafe_allow_html=True)
     
     # Add search section
-    st.markdown("<body><section id='search-section'><h2>Search for Your Ideal Destination</h2><form action='#' method='GET'><input type='text' name='price' placeholder='Price Range'><br><input type='text' name='place' placeholder='Location'><br><input type='text' name='amenities' placeholder='Amenities'><br><input type='submit' value='Search'></form></section></body>", unsafe_allow_html=True)
+    st.markdown("<section id='search-section'><h2>Search for Your Ideal Destination</h2><form action='#' method='GET'><input type='number' name='minprice' placeholder='Enter minimum price'><br><input type='number' name='maxprice' placeholder='Enter maximum price'><br><input type='text' name='place' placeholder='Location'><br><input type='text' name='amenities' placeholder='Amenities'><br><br><input type='submit' value='Search'></form></section>", unsafe_allow_html=True)
     # Add other sections using st.markdown()
     st.markdown("## About")
     st.markdown("Provide an overview of the Africura Travel Destination Recommendation System and its purpose. Describe how the system works and what it offers to users.")
