@@ -104,8 +104,19 @@ def main():
     st.markdown("Provide an overview of the Africura Travel Destination Recommendation System and its purpose. Describe how the system works and what it offers to users.")
     st.markdown("## Destinations")
     st.markdown("Present information about various travel destinations in Africa. Include descriptions, images, and highlights of each destination. You can provide links or buttons for users to explore more details about each destination.")
-    st.markdown("## Contact")
-    st.markdown("Include contact information or a contact form for users to get in touch with the Africura Travel Destination Recommendation System team. You can provide an email address, phone number, or social media handles.")
+    with st.markdown("## Contact"):
+        with st.form(key='contact-form'):
+            st.markdown("Include contact information or a contact form for users to get in touch with the Africura Travel Destination Recommendation System team. Please fill out the form below and we will get back to you as soon as possible.")
+            st.markdown("### Message")
+            message = st.text_area(label='Enter your message here')
+            st.markdown("### Contact Information")
+            name = st.text_input(label='Name')
+            email = st.text_input(label='Email')
+            phone = st.text_input(label='Phone')
+            st.markdown("###")
+            submit_button = st.form_submit_button(label='Submit')
+            if submit_button:
+                st.markdown("Thank you for getting in touch. We will get back to you as soon as possible.")
     st.markdown("<footer><p>&copy; 2023 Africura Travel Destination Recommendation System. All rights reserved.</p></footer>", unsafe_allow_html=True)
 if __name__ == '__main__':
     main()
