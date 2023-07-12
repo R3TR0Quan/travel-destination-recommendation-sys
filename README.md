@@ -71,6 +71,7 @@ We also conducted feature engineering on some columns to capture more informatio
 <p align='center'>
     <b>File Hierarchy
 </p>
+<p align='center'>
 ├── Data
 │   ├── botswana.json
 │   ├── Botswana reviews.json
@@ -122,3 +123,4 @@ We also conducted feature engineering on some columns to capture more informatio
 ├── notebook.ipynb
 ├── README.md
 └── writeup.docx
+</p>
