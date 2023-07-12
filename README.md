@@ -3,6 +3,14 @@ A recommendation system that gives users suggestions that best match their trave
 <p>
     <img src="Data/images/readme_banner.jpg" alt="Banner Image"/>
 </p>
+<p align="center">
+    <img src="https://img.shields.io/badge/-scikit--learn-F7931E?logo=scikit-learn&logoColor=white&style=flat-square">
+    <img src="https://img.shields.io/badge/-Surprise-4B0082?logo=python&logoColor=white&style=flat-square">
+    <img src="https://img.shields.io/badge/-Streamlit-FF4B4B?logo=streamlit&logoColor=white&style=flat-square">
+    <img src="https://img.shields.io/badge/-Pandas-150458?logo=pandas&logoColor=white&style=flat-square">
+    <img src="https://img.shields.io/badge/-NumPy-013243?logo=numpy&logoColor=white&style=flat-square">
+    <img src="https://img.shields.io/badge/-NLTK-4EA94B?logo=python&logoColor=white&style=flat-square">
+</p>
 
 #### Authors
 * [Dennis Mwanzia](https://github.com/DennisMwanzia)
@@ -26,28 +34,17 @@ The goal is to build a machine learning model that can accurately predict hotel 
 ## Our Data
 
 We sourced data by scraping destination review data from **TripAdvisor** 
-Here's a breakdown of what each column represent based on the names:
+Here's a breakdown of aome of the main columns we used in coming up with recommendations:
 
 * id: Unique identifier for each item.
 * type: Type of the item.
 * category: Category of the item.
 * subcategories: Subcategories associated with the item.
 * name: Name of the item.
-* locationString: String representation of the location of the item.
-* description: Description or details about the item.
-* image: Image associated with the item.
-* photoCount: Number of photos available for the item.
-* awards: Awards received by the item.
 * rankingPosition: Ranking position of the item.
 * rating: Rating of the item.
 * rawRanking: Raw ranking of the item.
-* phone: Phone number associated with the item.
-* address: Address of the item.
 * addressObj: Address information in object format.
-* localName: Local name of the item.
-* localAddress: Local address of the item.
-* localLangCode: Language code for the local information.
-* email: Email address associated with the item.
 * latitude: Latitude coordinate of the item's location.
 * longitude: Longitude coordinate of the item's location.
 * webUrl: URL associated with the item.
@@ -55,10 +52,7 @@ Here's a breakdown of what each column represent based on the names:
 * rankingString: Ranking information in string format.
 * rankingDenominator: Denominator for the ranking.
 * neighborhoodLocations: Locations of the item in the neighborhood.
-* nearestMetroStations: Nearest metro stations to the item.
-* ancestorLocations: Ancestor locations of the item.
 * ratingHistogram: Histogram data for the item's ratings.
-* numberOfReviews: Number of reviews for the item.
 * reviewTags: Tags associated with the reviews.
 * reviews: Reviews of the item.
 * booking: Booking information for the item.
@@ -70,28 +64,61 @@ Here's a breakdown of what each column represent based on the names:
 * numberOfRooms: Number of rooms available (for hotels).
 * priceLevel: Price level or range of the item.
 * priceRange: Price range of the item.
-* roomTips: Tips or recommendations for rooms (for hotels).
-* checkInDate: Date for check-in (for hotels).
-* checkOutDate: Date for check-out (for hotels).
-* offers: Offers associated with the item.
-* guideFeaturedInCopy: Information about guides featuring the item.
-* isClosed: Indicates if the item is closed.
-* isLongClosed: Indicates if the item has been closed for a long time.
-* openNowText: Text indicating if the item is currently open.
-* cuisines: Cuisines offered (for restaurants).
-* mealTypes: Types of meals available (for restaurants).
-* dishes: Dishes served (for restaurants).
-* features: Features or highlights of the item.
-* dietaryRestrictions: Dietary restrictions or considerations.
-* hours: Operating hours of the item.
-* menuWebUrl: URL for the menu (for restaurants).
-* establishmentTypes: Types of establishments.
-* ownersTopReasons: Top reasons provided by owners.
-* rentalDescriptions: Descriptions related to rentals.
-* photos: Photos associated with the item.
-* bedroomInfo: Information about bedrooms (for accommodations).
-* bathroomInfo: Information about bathrooms (for accommodations).
-* bathCount: Number of bathrooms (for accommodations).
-* baseDailyRate: Base daily rate (for accommodations).
 
-One **challenge** we faced was that the data was extremely inconsistent and had to be *'wrangled'* to be able to use if for the model
+There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
+We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project **writeup**.
+
+<p align='center'>
+    <b>File Hierarchy
+</p>
+├── Data
+│   ├── botswana.json
+│   ├── Botswana reviews.json
+│   ├── capeverde.json
+│   ├── clean_data.csv
+│   ├── compiled_data.csv
+│   ├── condensed_data.csv
+│   ├── drc.json
+│   ├── DRC reviews.json
+│   ├── egypt.json
+│   ├── Egypt reviews.json
+│   ├── ethiopia.json
+│   ├── ghana.json
+│   ├── images
+│   │   ├── Columnstoplot.png
+│   │   ├── map.png
+│   │   ├── multicollinearity.png
+│   │   ├── readme_banner.jpg
+│   │   ├── top_10_subcategories_individually.png
+│   │   ├── top_subcategories.png
+│   │   └── ui_bg.jpg
+│   ├── kenya.json
+│   ├── madagascar.json
+│   ├── malawi.json
+│   ├── morocco.json
+│   ├── namibia.json
+│   ├── nigeria.json
+│   ├── reviews_data.csv
+│   ├── rwanda.json
+│   ├── senegal.json
+│   ├── seychelles.json
+│   ├── south_africa.json
+│   ├── southafrica.json
+│   ├── tanzania.json
+│   ├── Tanzania reviews.json
+│   ├── uganda.json
+│   └── zambia.json
+├── deployment
+│   └── africura.py
+├── LICENSE
+├── misc_notebooks
+│   ├── dennis.ipynb
+│   ├── ian.ipynb
+│   ├── kane.ipynb
+│   ├── kibet.ipynb
+│   ├── pamela.ipynb
+│   ├── Pauline.ipynb
+│   └── rwanda.ipynb
+├── notebook.ipynb
+├── README.md
+└── writeup.docx
