@@ -40,6 +40,7 @@ Install the required packages using pip:
     ```
     pip install -r requirements.txt
     ```
+    
 Install Streamlit:
 
     ```
