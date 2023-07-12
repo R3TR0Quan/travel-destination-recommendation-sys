@@ -35,13 +35,13 @@ The goal is to build a machine learning model that can accurately predict hotel 
 
 ## Setup Instructions
 
-Install the required packages using pip:
+* Install the required packages using pip:
 
     ```
     pip install -r requirements.txt
     ```
-    
-Install Streamlit:
+
+* Install Streamlit:
 
     ```
     pip install streamlit
