@@ -71,56 +71,55 @@ We also conducted feature engineering on some columns to capture more informatio
 <p align='center'>
     <b>File Hierarchy
 </p>
-<p align='center'>
-├── Data
-│   ├── botswana.json
-│   ├── Botswana reviews.json
-│   ├── capeverde.json
-│   ├── clean_data.csv
-│   ├── compiled_data.csv
-│   ├── condensed_data.csv
-│   ├── drc.json
-│   ├── DRC reviews.json
-│   ├── egypt.json
-│   ├── Egypt reviews.json
-│   ├── ethiopia.json
-│   ├── ghana.json
-│   ├── images
-│   │   ├── Columnstoplot.png
-│   │   ├── map.png
-│   │   ├── multicollinearity.png
-│   │   ├── readme_banner.jpg
-│   │   ├── top_10_subcategories_individually.png
-│   │   ├── top_subcategories.png
-│   │   └── ui_bg.jpg
-│   ├── kenya.json
-│   ├── madagascar.json
-│   ├── malawi.json
-│   ├── morocco.json
-│   ├── namibia.json
-│   ├── nigeria.json
-│   ├── reviews_data.csv
-│   ├── rwanda.json
-│   ├── senegal.json
-│   ├── seychelles.json
-│   ├── south_africa.json
-│   ├── southafrica.json
-│   ├── tanzania.json
-│   ├── Tanzania reviews.json
-│   ├── uganda.json
-│   └── zambia.json
-├── deployment
-│   └── africura.py
-├── LICENSE
-├── misc_notebooks
-│   ├── dennis.ipynb
-│   ├── ian.ipynb
-│   ├── kane.ipynb
-│   ├── kibet.ipynb
-│   ├── pamela.ipynb
-│   ├── Pauline.ipynb
-│   └── rwanda.ipynb
-├── notebook.ipynb
-├── README.md
-└── writeup.docx
-</p>
+
+    ├── Data
+    │   ├── botswana.json
+    │   ├── Botswana reviews.json
+    │   ├── capeverde.json
+    │   ├── clean_data.csv
+    │   ├── compiled_data.csv
+    │   ├── condensed_data.csv
+    │   ├── drc.json
+    │   ├── DRC reviews.json
+    │   ├── egypt.json
+    │   ├── Egypt reviews.json
+    │   ├── ethiopia.json
+    │   ├── ghana.json
+    │   ├── images
+    │   │   ├── Columnstoplot.png
+    │   │   ├── map.png
+    │   │   ├── multicollinearity.png
+    │   │   ├── readme_banner.jpg
+    │   │   ├── top_10_subcategories_individually.png
+    │   │   ├── top_subcategories.png
+    │   │   └── ui_bg.jpg
+    │   ├── kenya.json
+    │   ├── madagascar.json
+    │   ├── malawi.json
+    │   ├── morocco.json
+    │   ├── namibia.json
+    │   ├── nigeria.json
+    │   ├── reviews_data.csv
+    │   ├── rwanda.json
+    │   ├── senegal.json
+    │   ├── seychelles.json
+    │   ├── south_africa.json
+    │   ├── southafrica.json
+    │   ├── tanzania.json
+    │   ├── Tanzania reviews.json
+    │   ├── uganda.json
+    │   └── zambia.json
+    ├── deployment
+    │   └── africura.py
+    ├── LICENSE
+    ├── misc_notebooks
+    │   ├── dennis.ipynb
+    │   ├── ian.ipynb
+    │   ├── kane.ipynb
+    │   ├── kibet.ipynb
+    │   ├── pamela.ipynb
+    │   ├── Pauline.ipynb
+    │   └── rwanda.ipynb
+    ├── notebook.ipynb
+    ├── README.md
+    └── writeup.docx
