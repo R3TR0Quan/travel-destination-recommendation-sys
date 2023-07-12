@@ -33,6 +33,23 @@ Our main aim as AfricuraAI is to develop a machine learning model i.e. recommend
 
 The goal is to build a machine learning model that can accurately predict hotel ratings based on customer reviews, budget constraints, specific locations, and the type of residence. The model will help users make informed decisions when selecting hotels by considering their preferences and constraints.
 
+## Setup Instructions
+
+Install the required packages using pip:
+
+    ```
+    pip install -r requirements.txt
+    ```
+Install Streamlit:
+
+    ```
+    pip install streamlit
+    ```
+
+* To run the app locally run the following on terminal:
+    ```
+    streamlit run deployment/africura.py
+    ```
 ## Our Data
 
 We sourced data by scraping destination review data from **TripAdvisor** 
