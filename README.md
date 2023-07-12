@@ -107,6 +107,8 @@ We also conducted feature engineering on some columns to capture more informatio
     │   ├── uganda.json
     │   └── zambia.json
     ├── deployment
+        ├── app_data
+        │   ├── clean_data.csv
     │   └── africura.py
     ├── LICENSE
     ├── misc_notebooks
