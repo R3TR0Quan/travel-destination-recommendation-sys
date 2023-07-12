@@ -99,14 +99,18 @@ def main():
     
     # Add search section
     st.markdown("<section id='search-section'><h2>Search for Your Ideal Destination</h2><form action='#' method='GET'><input type='number' name='minprice' placeholder='Enter minimum price'><br><input type='number' name='maxprice' placeholder='Enter maximum price'><br><input type='text' name='place' placeholder='Location'><br><input type='text' name='amenities' placeholder='Amenities'><br><br><input type='submit' value='Search'></form></section>", unsafe_allow_html=True)
-    # Add other sections using st.markdown()
-    st.markdown("## About")
-    st.markdown("Provide an overview of the Africura Travel Destination Recommendation System and its purpose. Describe how the system works and what it offers to users.")
+    
+    #Add section to display suggestions
     st.markdown("## Destinations")
     st.markdown("Present information about various travel destinations in Africa. Include descriptions, images, and highlights of each destination. You can provide links or buttons for users to explore more details about each destination.")
+
+    # Add other sections using st.markdown()
+    st.markdown("## About")
+    st.markdown("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+    
     with st.markdown("## Contact"):
         with st.form(key='contact-form'):
-            st.markdown("Include contact information or a contact form for users to get in touch with the Africura Travel Destination Recommendation System team. Please fill out the form below and we will get back to you as soon as possible.")
+            st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
             st.markdown("### Message")
             message = st.text_area(label='Enter your message here')
             st.markdown("### Contact Information")
