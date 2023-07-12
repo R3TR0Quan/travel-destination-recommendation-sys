@@ -47,19 +47,14 @@ Here's a breakdown of aome of the main columns we used in coming up with recomme
 * addressObj: Address information in object format.
 * latitude: Latitude coordinate of the item's location.
 * longitude: Longitude coordinate of the item's location.
-* webUrl: URL associated with the item.
-* website: Website URL of the item.
 * rankingString: Ranking information in string format.
 * rankingDenominator: Denominator for the ranking.
 * neighborhoodLocations: Locations of the item in the neighborhood.
-* ratingHistogram: Histogram data for the item's ratings.
 * reviewTags: Tags associated with the reviews.
 * reviews: Reviews of the item.
 * booking: Booking information for the item.
-* offerGroup: Group of offers associated with the item.
 * subtype: Subtype or specific type of the item.
 * hotelClass: Class or rating of a hotel item.
-* hotelClassAttribution: Attribution information for the hotel's class.
 * amenities: Amenities available at the item.
 * numberOfRooms: Number of rooms available (for hotels).
 * priceLevel: Price level or range of the item.
