@@ -164,3 +164,4 @@ cython_debug/
 .reviews_data.csv
 .uganda_reviews.json
 Data/reviews_data.csv
+.vscode/settings.json
