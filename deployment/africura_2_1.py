@@ -16,7 +16,7 @@ import warnings
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def load_data():
     # Load the clean_df DataFrame
     clean_df = pd.read_csv('../data/clean_data.csv')
@@ -131,11 +131,12 @@ clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data(
 # Initialize the RecommenderSystem object
 recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
+
 def main():
     st.title("Recommender System")
 
     # Sidebar
-    option = st.sidebar.selectbox("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
+    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
 
     # Add other sections using st.markdown()
     st.sidebar("## About")
@@ -165,9 +166,6 @@ def main():
     st.write("Here are some recommendations for you:")
     for recommendation in recommendations:
         st.write(recommendation)
-
-    # Render the sidebar
-    st.sidebar.render()
 
 if __name__ == "__main__":
     main()
