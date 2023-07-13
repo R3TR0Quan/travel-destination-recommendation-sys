@@ -16,7 +16,7 @@ A recommendation system that gives users suggestions that best match their trave
 
 #### Authors
 * [Dennis Mwanzia](https://github.com/DennisMwanzia)
-* [Pamela Owino](https://github.com/PamelaAwino)
+* [Pamela Awino](https://github.com/PamelaAwino)
 * [Joshua Rwanda](https://github.com/R3TR0Quan)
 * [Nelson Kemboi](https://github.com/nelkemboi)
 * [Pauline Wambui](https://github.com/paulineKiarie)
