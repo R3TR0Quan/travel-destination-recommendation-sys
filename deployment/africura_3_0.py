@@ -17,47 +17,22 @@ from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
 @st.cache_resource
-def load_data():
-    # Load the clean_df DataFrame
-    clean_df = pd.read_csv('../data/clean_data.csv')
-    
-    # Load the pickled files
-    with open(r'../data/tfidfv_matrix2.pkl', 'rb') as f:
-        tfidfv_matrix2 = pickle.load(f)
-        
-    with open(r'../data/.cosine_sim2.pkl', 'rb') as f:
-        cosine_sim2 = pickle.load(f)
-
-    with open(r'../data/.cosine_similarities.pkl', 'rb') as f:
-        cosine_similarities = pickle.load(f)
-
-    with open(r'../data/.indices.pkl', 'rb') as f:
-        indices = pickle.load(f)
-
-    return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
-	
-	
 class AfricuraRecommender:
-    def __init__(self, data_path, cosine_sim_path):
-        self.clean_df = pd.read_csv(data_path)
-        self.cosine_similarities = pd.read_csv(cosine_sim_path)
+    def __init__(self, clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices):
+        self.clean_df = clean_df
+        self.tfidfv_matrix2 = tfidfv_matrix2
+        self.cosine_sim2 = cosine_sim2
+        self.cosine_similarities = cosine_similarities
+        self.indices = indices
+        
+    def recommend_attraction(self, rating_threshold):
+        # Filter the DataFrame based on the rating threshold
+        recommendations = self.clean_df[self.clean_df['rating'] > rating_threshold][['name', 'LowerPrice', 'UpperPrice','amenities', 'type', 'country']]
 
-    def combine_similar_amenities(self, amenities):
-        combined_amenities = []
+        # Reset the index of the recommendations DataFrame
+        recommendations.reset_index(drop=True, inplace=True) 
 
-        for amenity in amenities:
-            amenity = amenity.lower().strip()  # Convert to lowercase and remove leading/trailing whitespaces
 
-            # Combine similar amenities based on specific rules
-            if amenity == "free wifi":
-                amenity = "wifi"
-            elif amenity == "free internet":
-                amenity = "internet"
-            # Add more rules for other similar amenities if needed
-
-            combined_amenities.append(amenity)
-
-        return combined_amenities
 
     def recommend_amenities(self, selected_amenity):
         # Create a dictionary to map amenities to their indices
@@ -140,14 +115,25 @@ class AfricuraRecommender:
         top_items = item_scores[1:top_n + 1]  # Exclude the item itself
 
         return top_items
-		
-		
-# Load the data
-clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
 
-# Initialize the AfricuraRecommender object
-recommender = AfricuraRecommender(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
+def load_data():
+    # Load the clean_df DataFrame
+    clean_df = pd.read_csv('../data/clean_data.csv')
 
+    # Load the pickled files
+    with open(r'../data/tfidfv_matrix2.pkl', 'rb') as f:
+        tfidfv_matrix2 = pickle.load(f)
+
+    with open(r'../data/.cosine_sim2.pkl', 'rb') as f:
+        cosine_sim2 = pickle.load(f)
+
+    with open(r'../data/.cosine_similarities.pkl', 'rb') as f:
+        cosine_similarities = pickle.load(f)
+
+    with open(r'../data/.indices.pkl', 'rb') as f:
+        indices = pickle.load(f)
+
+    return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
 
 def main():
     st.title("Recommender System")
@@ -168,10 +154,11 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    # Load the data and similarity matrix
-    data_path = "path_to_data.csv"
-    cosine_sim_path = "path_to_cosine_similarities.csv"
-    recommender = AfricuraRecommender(data_path, cosine_sim_path)
+    # Load the data
+    clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
+
+    # Create the recommender object
+    recommender = AfricuraRecommender(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
     # Get the user's preferences
     preferences = st.sidebar.multiselect("What are your preferences?", ["Nature", "Culture", "History", "Food", "Adventure"])
