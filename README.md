@@ -53,7 +53,7 @@ The goal is to build a machine learning model that can accurately predict hotel 
     ```
 ## Our Data
 
-We sourced data by scraping destination review data from **TripAdvisor** 
+We sourced data by scraping destination review data from **TripAdvisor** using a popular web scraping tool, [Apify](https://console.apify.com) 
 Here's a breakdown of aome of the main columns we used in coming up with recommendations:
 
 * `id`: Unique identifier for each item.
@@ -82,6 +82,23 @@ Here's a breakdown of aome of the main columns we used in coming up with recomme
 
 There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
 We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project **writeup**.
+
+## EDA
+
+We conducted some EDA that yielded us some domain knowledge we could use to inform future steps and modelling
+Some of the plots we came up with are shown below: 
+<p align='center'>
+    <img src="Data/images/Columnstoplot.png" alt="columns plot"/>
+    <img src="Data/images/top_10_subcategories_individually.png" alt="top_10_subcategories_individually"/>
+</p>
+
+## Modelling 
+
+We built multiple models powered by different algorithms.
+
+## Deployment
+
+Included in the repository is a streamlit user interface that serves as the rudimentary method through which users shall interact with our model.
 
 <p align='center'>
     <b>File Hierarchy
