@@ -136,7 +136,9 @@ def main():
 
     # Sidebar
     option = st.sidebar.selectbox("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
-    
+    # Add other sections using st.markdown()
+    st.sidebar("## About")
+    st.sidebar("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
     # Set the CSS style
     css = '''
     <style>
@@ -231,9 +233,7 @@ def main():
     st.markdown(css, unsafe_allow_html=True)
     st.markdown("<header><h1>Africura Travel Destination Recommendation System</h1></header>", unsafe_allow_html=True)
 
-    # Add other sections using st.markdown()
-    st.markdown("## About")
-    st.markdown("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+
     
     with st.markdown("## Contact"):
         with st.form(key='contact-form'):
