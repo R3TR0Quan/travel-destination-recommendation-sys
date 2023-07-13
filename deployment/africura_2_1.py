@@ -16,7 +16,7 @@ import warnings
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
-@st.cache_data
+@st.cache_resource
 def load_data():
     # Load the clean_df DataFrame
     clean_df = pd.read_csv('../data/clean_data.csv')
@@ -53,10 +53,9 @@ class RecommenderSystem:
         recommendations.reset_index(drop=True, inplace=True)
 
         return recommendations
-
     def recommend_amenities(self, query):
         # Check if the specified amenity exists in the dataset
-        if query not in self.clean_df['amenities'].str.join(', '):
+        if not any(self.clean_df['amenities'].apply(lambda x: query in x if isinstance(x, list) else False)):
             st.error(f"Error: '{query}' does not exist in the dataset.")
             return None
 
@@ -90,27 +89,7 @@ class RecommenderSystem:
         # Check if the specified place exists in the dataset
         if name not in indices:
             st.error(f"Error: '{name}' does not exist in the dataset.")
-            return None
-
-        # Get the index of the specified place
-        idx = indices[name]
-
-        # Get the pairwise similarity scores of all places with the specified place
-        sim_scores = list(enumerate(self.cosine_similarities[idx]))
-
-        # Sort the places based on the similarity scores
-        sim_scores.sort(key=lambda x: x[1], reverse=True)
-
-        # Get the scores of the 10 most similar places
-        sim_scores = sim_scores[1:11]
-
-        # Get the indices of the top-N similar places
-        indices = [x for x, _ in sim_scores]
-
-        # Get the recommended places
-        recommended_places = self.clean_df.iloc[indices]['name']
-
-        return recommended_places
+        return []
 
     def get_item_recommendations(self, item_index, top_n=5):
         # Get similarity scores for the item
@@ -139,8 +118,8 @@ def main():
     option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
 
     # Add other sections using st.markdown()
-    st.sidebar("## About")
-    st.sidebar("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+    st.sidebar.subheader("About")
+    st.sidebar.write("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
 
     # Set the CSS style
     st.markdown("""
@@ -156,16 +135,24 @@ def main():
 
     # Recommend locations based on the user's preferences
     if option == "Attraction":
-        recommendations = get_attractions(preferences)
+        recommendations = recommender.recommend_attraction(rating_threshold=0.0)
     elif option == "Amenities":
-        recommendations = get_amenities(preferences)
+        if len(preferences) == 0:
+            st.error("Error: Please select at least one preference.")
+            recommendations = None
+        else:
+            recommendations = recommender.recommend_amenities(preferences)
     elif option == "Place":
-        recommendations = get_places(preferences)
+        if len(preferences) == 0:
+            st.error("Error: Please select at least one preference.")
+            recommendations = None
+        else:
+            recommendations = recommender.recommend_place(preferences[0])
 
     # Display the recommendations
-    st.write("Here are some recommendations for you:")
-    for recommendation in recommendations:
-        st.write(recommendation)
+    if recommendations is not None:
+        st.write("Here are some recommendations for you:")
+        st.write(recommendations)
 
 if __name__ == "__main__":
     main()
