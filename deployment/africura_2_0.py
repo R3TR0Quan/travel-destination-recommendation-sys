@@ -1,4 +1,3 @@
-# Importing necessary libraries
 import pandas as pd
 import numpy as np
 import json
@@ -15,11 +14,9 @@ from surprise.model_selection import train_test_split
 from surprise import accuracy as sup_accuracy
 import warnings
 from sklearn.metrics.pairwise import cosine_similarity
-
 import streamlit as st
 
-
-@st.cache_resource#(allow_output_mutation=True)
+@st.cache(allow_output_mutation=True)
 def load_data():
     # Load the clean_df DataFrame
     clean_df = pd.read_csv('../data/clean_data.csv')
@@ -135,6 +132,11 @@ clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data(
 recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
 def main():
+    st.title("Recommender System")
+
+    # Sidebar
+    option = st.sidebar.selectbox("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
+    
     # Set the CSS style
     css = '''
     <style>
@@ -188,13 +190,64 @@ def main():
         h2 {
             margin-top: 0;
         }
+        /* Search section styles */
+        #search-section {
+            background-image: url('../Data/images/ui_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 600px;
+        }
+        input[type="number"] { /* Updated input type to number */
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        /* Footer styles */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
     </style>
     '''
+
     # Render the HTML code
     st.markdown(css, unsafe_allow_html=True)
     st.markdown("<header><h1>Africura Travel Destination Recommendation System</h1></header>", unsafe_allow_html=True)
 
-    # Add section to display suggestions
-    if st.button('Get Recommendations'):
-        suggestions = recommender.recommend_attraction(st.number_input('Enter Rating Threshold', min_value=0.0, max_value=5.0, value=3.0, step=0.1))
-        st.dataframe(suggestions)
+    # Add other sections using st.markdown()
+    st.markdown("## About")
+    st.markdown("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+    
+    with st.markdown("## Contact"):
+        with st.form(key='contact-form'):
+            st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
+            st.markdown("### Message")
+            message = st.text_area(label='Enter your message here')
+            st.markdown("### Contact Information")
+            name = st.text_input(label='Name')
+            email = st.text_input(label='Email')
+            phone = st.text_input(label='Phone')
+            st.markdown("###")
+            submit_button = st.form_submit_button(label='Submit')
+            if submit_button:
+                st.markdown("Thank you for getting in touch. We will get back to you as soon as possible.")
+
+if __name__ == '__main__':
+    main()
