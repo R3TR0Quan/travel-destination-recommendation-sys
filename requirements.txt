@@ -304,6 +304,7 @@ scapy==2.5.0
 scikit-image @ file:///croot/scikit-image_1669241743693/work
 scikit-learn @ file:///tmp/build/80754af9/scikit-learn_1642617106979/work
 scikit-learn-intelex==2021.20221004.171807
+scikit-surprise==1.1.3
 scipy==1.10.1
 Scrapy @ file:///tmp/abs_e3bmwi01y8/croots/recipe/scrapy_1659598696235/work
 seaborn @ file:///croot/seaborn_1673479180098/work
@@ -332,6 +333,7 @@ spyder-kernels @ file:///opt/conda/conda-bld/spyder-kernels_1662457880976/work
 SQLAlchemy @ file:///tmp/abs_18b3238f-9c23-4182-a392-63af30a93c1er8j_yw60/croots/recipe/sqlalchemy_1657867856580/work
 statsmodels @ file:///croot/statsmodels_1676643798791/work
 streamlit==1.24.1
+surprise==0.1
 sympy @ file:///croot/sympy_1668202399572/work
 tables @ file:///home/conda/feedstock_root/build_artifacts/pytables_1680968680025/work
 tabulate @ file:///opt/conda/conda-bld/tabulate_1657784105888/work
