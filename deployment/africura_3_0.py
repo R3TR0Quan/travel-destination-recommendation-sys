@@ -17,7 +17,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 class AfricuraRecommender:
     def __init__(self, clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices):
         self.clean_df = clean_df
@@ -112,19 +112,19 @@ def load_data():
         clean_df = pickle.load(f)
 
     # Load the pickled files
-    with open(r'../data/tfidfv_matrix2.pkl', 'rb') as f:
-        tfidfv_matrix2 = pickle.load(f)
+    with open(r'../data/tfidf_matrix2.pkl', 'rb') as f:
+        _tfidfv_matrix2 = pickle.load(f)
 
-    with open(r'../data/cosine_sim2.pkl', 'rb') as f:
+    with open(r'../data/.cosine_sim2.pkl', 'rb') as f:
         cosine_sim2 = pickle.load(f)
 
-    with open(r'../data/cosine_similarities.pkl', 'rb') as f:
+    with open(r'../data/.cosine_similarities.pkl', 'rb') as f:
         cosine_similarities = pickle.load(f)
 
-    with open(r'../data/indices.pkl', 'rb') as f:
+    with open(r'../data/.indices.pkl', 'rb') as f:
         indices = pickle.load(f)
 
-    return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
+    return clean_df, _tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
 
 
 def main():
@@ -147,10 +147,10 @@ def main():
     """, unsafe_allow_html=True)
 
     # Load the data
-    clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
+    clean_df, _tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
 
     # Create the recommender object
-    recommender = AfricuraRecommender(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
+    recommender = AfricuraRecommender(clean_df, _tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
     # Get the user's preferences
     preferences = st.sidebar.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
@@ -170,15 +170,21 @@ def main():
         if st.button("Get Recommendations"):
             recommended_amenities = recommender.recommend_amenities(amenity)
             st.write(recommended_amenities)
-
     elif option == "Place":
-        st.header("Place Recommendation")
         place_name = st.text_input("Enter Place Name")
+        if len(place_name.strip()) == 0:
+            if len(preferences) == 0:
+                st.error("Error: Please enter a place name or select at least one preference.")
+                recommendations = None
+            else:
+                recommendations = recommender.recommend_place_based_on_preferences(preferences)
+        else:
+            recommendations = recommender.recommend_place(place_name)
 
-        if st.button("Get Recommendations"):
-            recommended_places = recommender.recommend_place(place_name)
-            st.write(recommended_places)
-
+    # Display the recommendations
+    if recommendations is not None:
+        st.write("Here are some recommendations for you:")
+        st.write(recommendations)
 
 if __name__ == "__main__":
     main()
