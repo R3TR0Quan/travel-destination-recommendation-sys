@@ -184,7 +184,7 @@ def main():
     selection = st.sidebar.selectbox("Select Menu", menu)
     
     # Sidebar
-    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Amenities", "Place", "Preferences"])
+    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Place", "Preferences", "Amenities"])
         
     # Add other sections using st.markdown()
     st.sidebar.subheader("About")
@@ -193,7 +193,9 @@ def main():
     if selection == "About" :
         st.markdown("## Welcome to Africura!")
         st.markdown("A one stop shop for all you WanderLusters. ")
-         
+        st.write("Personalized Destination Recommendations: Utilize your recommendation system to suggest personalized travel destinations to users based on their budget constraints. Take into account factors such as customer reviews, location preferences, amenities, and residence types to offer tailored recommendations that align with their preferences.")
+        st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
+        st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
         with st.markdown("## Contact"):
             with st.form(key='contact-form'):
                 st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
@@ -246,29 +248,6 @@ def main():
             if st.button("Get Recommendations"):
                 recommendations = recommender.recommend_attraction(rating_threshold)
                 st.dataframe(recommendations)
-
-        elif option == "Amenities":      
-            amenity = st.text_input("Enter Amenity Name")
-
-            if st.button("Get Recommendations"):
-                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
-                st.write(recommended_amenities)
-        elif option == "Preferences":
-            amenities_dropdown = st.selectbox("Consolidated Amenities", clean_df['consolidated_amenities'].unique())                         
-            def get_recommended_amenities(amenity):
-                recommended_amenities = recommend_amenities(amenity, cosine_sim2, clean_df)
-                if isinstance(recommended_amenities, str):
-                    display(HTML(recommended_amenities))
-                else:
-                    display(recommended_amenities)
-                st.dataframe(get_recommended_amenities(amenities_dropdown))
-                #amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'])
-                
-
-
-            # Create a dropdown menu with the available amenities
-                #amenities_dropdown = Dropdown(options=clean_df['consolidated_amenities'].unique(), description='Select Amenity:')
-        
         
         elif option == "Place":
  
@@ -278,12 +257,26 @@ def main():
             if st.button("Get Recommendations"):
                 recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
                 st.write(recommended_places)
-         
-
-        # Additional sections for the amenities tab
  
+        elif option == "Preferences":
+            amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'].unique())
 
-    
+            def get_recommended_amenities(amenity):
+                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
+                if isinstance(recommended_amenities, str):
+                    st.write(recommended_amenities)
+                else:
+                    st.write(recommended_amenities)
+
+            get_recommended_amenities(amenities_dropdown)
+                    
+        elif option == "Amenities":      
+            amenity = st.text_input("Enter Amenity Name")
+
+            if st.button("Get Recommendations"):
+                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
+                st.write(recommended_amenities)
+  
     
 if __name__ == "__main__":
     main()
