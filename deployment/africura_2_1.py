@@ -57,9 +57,8 @@ class RecommenderSystem:
         recommendations.reset_index(drop=True, inplace=True)
 
         return recommendations
-
-
-    def recommend_amenities(self, selected_amenity):
+        
+    def recommend_amenities(self, selected_amenity, cosine_sim2, clean_df):
         # Create a dictionary to map amenities to their indices
         indices = {amen: index for index, amen in enumerate(self.clean_df['consolidated_amenities'])}
 
@@ -82,16 +81,17 @@ class RecommenderSystem:
 
             return self.clean_df.set_index('consolidated_amenities').iloc[indices][
                 [
+                    'name',
                     'country',
                     'RankingType',
-                    'subcategories',
+                    'amenities',
                     'LowerPrice',
                     'UpperPrice',
                 ]
             ]
         else:
             return "Amenity not found."
-    #amenities_dropdown = Dropdown(options=clean_df['consolidated_amenities'].unique(), description='Select Amenity:')
+    
             
     def get_recommended_amenities(amenity):
         recommended_amenities = recommend_amenities(amenity, cosine_sim2, clean_df)
@@ -100,9 +100,8 @@ class RecommenderSystem:
         else:
             display(recommended_amenities)
 
-    #interact_manual(get_recommended_amenities, amenity=amenities_dropdown)
-
-    def recommend_place(self, name):
+ 
+    def recommend_place(self, name, cosine_sim2, clean_df):
         # Create a dictionary to map place names to their indices
         indices = {title: index for index, title in enumerate(self.clean_df['name'])}
 
@@ -115,7 +114,7 @@ class RecommenderSystem:
         idx = indices[name]
 
         # Get the pairwise similarity scores of all places with the specified place
-        sim_scores = list(enumerate(self.cosine_sim2[idx]))
+        sim_scores = list(enumerate(self.cosine_similarities[idx]))
 
         # Sort the places based on the similarity scores
         sim_scores.sort(key=lambda x: x[1], reverse=True)
@@ -139,17 +138,22 @@ class RecommenderSystem:
 
         return recommended_places
 
-    def get_item_recommendations(self, item_index, top_n=5):
-        # Get similarity scores for the item
-        item_scores = list(enumerate(self.cosine_similarities[item_index]))
 
-        # Sort items based on similarity scores
-        item_scores = sorted(item_scores, key=lambda x: x[1], reverse=True)
+        
+    def get_item_recommendations(self, preference, top_n=5):
+     # Get the index of the preference
+        preference_index = self.clean_df['consolidated_amenities'].tolist().index(preference)
 
-        # Get top-N similar items
-        top_items = item_scores[1:top_n + 1]  # Exclude the item itself
+        # Get similarity scores for the preference
+        preference_scores = list(enumerate(self.cosine_similarities[preference_index]))
 
-        return top_items
+        # Sort preferences based on similarity scores
+        preference_scores = sorted(preference_scores, key=lambda x: x[1], reverse=True)
+
+        # Get top-N similar preferences
+        top_preferences = preference_scores[1:top_n + 1]  # Exclude the preference itself
+
+        return top_preferences
 
 
 def main():
@@ -192,18 +196,33 @@ def main():
         amenity = st.text_input("Enter Amenity Name")
 
         if st.button("Get Recommendations"):
-            recommended_amenities = recommender.recommend_amenities(amenity)
+            recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
             st.write(recommended_amenities)
             # Create a dropdown menu with the available amenities
             #amenities_dropdown = Dropdown(options=clean_df['consolidated_amenities'].unique(), description='Select Amenity:')
-        
 
     elif option == "Place":
+        st.header("Place Recommendation")
         place_name = st.text_input("Enter Place Name")
 
         if st.button("Get Recommendations"):
-            recommended_places = recommender.recommend_place(place_name)
+            recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
             st.write(recommended_places)
 
+    # Additional sections for the amenities tab
+    if option == "Amenities":
+        amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'].unique())
+
+        def get_recommended_amenities(amenity):
+            recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
+            if isinstance(recommended_amenities, str):
+                st.write(recommended_amenities)
+            else:
+                st.write(recommended_amenities)
+
+        get_recommended_amenities(amenities_dropdown)
+
+    
+    
 if __name__ == "__main__":
     main()
