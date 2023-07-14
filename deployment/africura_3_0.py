@@ -16,7 +16,8 @@ import warnings
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
-@st.cache_resource
+
+@st.cache(allow_output_mutation=True)
 class AfricuraRecommender:
     def __init__(self, clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices):
         self.clean_df = clean_df
@@ -24,15 +25,15 @@ class AfricuraRecommender:
         self.cosine_sim2 = cosine_sim2
         self.cosine_similarities = cosine_similarities
         self.indices = indices
-        
+
     def recommend_attraction(self, rating_threshold):
         # Filter the DataFrame based on the rating threshold
         recommendations = self.clean_df[self.clean_df['rating'] > rating_threshold][['name', 'LowerPrice', 'UpperPrice','amenities', 'type', 'country']]
 
         # Reset the index of the recommendations DataFrame
-        recommendations.reset_index(drop=True, inplace=True) 
+        recommendations.reset_index(drop=True, inplace=True)
 
-
+        return recommendations
 
     def recommend_amenities(self, selected_amenity):
         # Create a dictionary to map amenities to their indices
@@ -104,36 +105,27 @@ class AfricuraRecommender:
 
         return recommended_places
 
-    def get_item_recommendations(self, item_index, top_n=5):
-        # Get similarity scores for the item
-        item_scores = list(enumerate(self.cosine_similarities[item_index]))
-
-        # Sort items based on similarity scores
-        item_scores = sorted(item_scores, key=lambda x: x[1], reverse=True)
-
-        # Get top-N similar items
-        top_items = item_scores[1:top_n + 1]  # Exclude the item itself
-
-        return top_items
 
 def load_data():
     # Load the clean_df DataFrame
-    clean_df = pd.read_csv('../data/clean_data.csv')
+    with open(r'../data/clean_df.pkl', 'rb') as f:
+        clean_df = pickle.load(f)
 
     # Load the pickled files
     with open(r'../data/tfidfv_matrix2.pkl', 'rb') as f:
         tfidfv_matrix2 = pickle.load(f)
 
-    with open(r'../data/.cosine_sim2.pkl', 'rb') as f:
+    with open(r'../data/cosine_sim2.pkl', 'rb') as f:
         cosine_sim2 = pickle.load(f)
 
-    with open(r'../data/.cosine_similarities.pkl', 'rb') as f:
+    with open(r'../data/cosine_similarities.pkl', 'rb') as f:
         cosine_similarities = pickle.load(f)
 
-    with open(r'../data/.indices.pkl', 'rb') as f:
+    with open(r'../data/indices.pkl', 'rb') as f:
         indices = pickle.load(f)
 
     return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
+
 
 def main():
     st.title("Recommender System")
@@ -161,30 +153,32 @@ def main():
     recommender = AfricuraRecommender(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
     # Get the user's preferences
-    preferences = st.sidebar.multiselect("What are your preferences?", ["Nature", "Culture", "History", "Food", "Adventure"])
+    preferences = st.sidebar.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
 
-    # Recommend locations based on the user's preferences
     if option == "Attraction":
-        recommendations = recommender.recommend_attraction(rating_threshold=0.0)
-    elif option == "Amenities":
-        if len(preferences) == 0:
-            st.error("Error: Please select at least one preference.")
-            recommendations = None
-        else:
-            selected_amenity = ", ".join(preferences)
-            consolidated_amenities = recommender.combine_similar_amenities(preferences)
-            recommendations = recommender.recommend_amenities(selected_amenity)
-    elif option == "Place":
-        if len(preferences) == 0:
-            st.error("Error: Please select at least one preference.")
-            recommendations = None
-        else:
-            recommendations = recommender.recommend_place(preferences[0])
+        st.header("Attraction Recommendation")
+        rating_threshold = st.number_input("Enter Rating Threshold", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
 
-    # Display the recommendations
-    if recommendations is not None:
-        st.write("Here are some recommendations for you:")
-        st.write(recommendations)
+        if st.button("Get Recommendations"):
+            recommendations = recommender.recommend_attraction(rating_threshold)
+            st.dataframe(recommendations)
+
+    elif option == "Amenities":
+        st.header("Amenities Recommendation")
+        amenity = st.text_input("Enter Amenity Name")
+
+        if st.button("Get Recommendations"):
+            recommended_amenities = recommender.recommend_amenities(amenity)
+            st.write(recommended_amenities)
+
+    elif option == "Place":
+        st.header("Place Recommendation")
+        place_name = st.text_input("Enter Place Name")
+
+        if st.button("Get Recommendations"):
+            recommended_places = recommender.recommend_place(place_name)
+            st.write(recommended_places)
+
 
 if __name__ == "__main__":
     main()
