@@ -48,6 +48,27 @@ class RecommenderSystem:
         self.cosine_sim2 = cosine_sim2
         self.cosine_similarities = cosine_similarities
         self.indices = indices
+        
+    def get_item_recommendations(item_index, cosine_similarities, top_n=5):
+        # Get similarity scores for the item
+        item_scores = list(enumerate(cosine_similarities[item_index]))
+
+        # Sort items based on similarity scores
+        item_scores = sorted(item_scores, key=lambda x: x[1], reverse=True)
+
+        # Get top-N similar items
+        top_items = item_scores[1 : top_n + 1]  # Exclude the item itself
+
+        return top_items
+
+        # Get recommendations for a specific item (e.g., item with index 0)
+        item_index = 0
+        recommendations_a = get_item_recommendations(item_index, cosine_similarities)
+
+        # Print the top 5 recommendations
+        #for item_id, similarity in recommendations:
+        #print(f"Item ID: {item_id}, Similarity: {similarity}")
+
 
     def recommend_attraction(self, rating_threshold):
         # Filter the DataFrame based on the rating threshold
@@ -157,70 +178,110 @@ class RecommenderSystem:
 
 
 def main():
-    st.title("Recommender System")
 
+    st.set_page_config(layout="wide")
+    menu = ['About', 'Recomenders']
+    selection = st.sidebar.selectbox("Select Menu", menu)
+    
     # Sidebar
-    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Amenities", "Place"])
-
+    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Amenities", "Place", "Preferences"])
+        
     # Add other sections using st.markdown()
     st.sidebar.subheader("About")
     st.sidebar.write("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+    
+    if selection == "About" :
+        st.markdown("## Welcome to Africura!")
+        st.markdown("A one stop shop for all you WanderLusters. ")
+         
+        with st.markdown("## Contact"):
+            with st.form(key='contact-form'):
+                st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
+                st.markdown("### Message")
+                message = st.text_area(label='Enter your message here')
+                st.markdown("### Contact Information")
+                name = st.text_input(label='Name')
+                email = st.text_input(label='Email')
+                phone = st.text_input(label='Phone')
+                st.markdown("###")
+                submit_button = st.form_submit_button(label='Submit')
+                if submit_button:
+                    st.markdown("Thank you for getting in touch. We will get back to you as soon as possible.")
+        st.markdown("<footer><p>&copy; 2023 Africura Travel Destination Recommendation System. All rights reserved.</p></footer>", unsafe_allow_html=True)   
+        
+        
+        
+        
+        
+    if selection == "Recomenders" :    
+        st.title("Recommender System")
+    
+        
+        # Add other sections using st.markdown()
+        #st.sidebar.subheader("About")
+        #st.sidebar.write("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
 
-    # Set the CSS style
-    st.markdown("""
-        <style>
-            .st-sidebar {
-                width: 200px;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+        # Set the CSS style
+        st.markdown("""
+            <style>
+                .st-sidebar {
+                    width: 100px;
+                }
+            </style>
+        """, unsafe_allow_html=True)
 
-    # Get the user's preferences
-    preferences = st.sidebar.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
+        # Get the user's preferences
+        preferences = st.sidebar.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
 
-    # Load the data
-    clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
+        # Load the data
+        clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
 
-    # Create the RecommenderSystem object
-    recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
+        # Create the RecommenderSystem object
+        recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
-    # Recommend locations based on the user's preferences
-    if option == "Attraction":
-        rating_threshold = st.number_input("Enter Rating Threshold", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
+        # Recommend locations based on the user's preferences
+        if option == "Attraction":
+            rating_threshold = st.number_input("Enter Rating Threshold", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
 
-        if st.button("Get Recommendations"):
-            recommendations = recommender.recommend_attraction(rating_threshold)
-            st.dataframe(recommendations)
+            if st.button("Get Recommendations"):
+                recommendations = recommender.recommend_attraction(rating_threshold)
+                st.dataframe(recommendations)
 
-    elif option == "Amenities":      
-        amenity = st.text_input("Enter Amenity Name")
+        elif option == "Amenities":      
+            amenity = st.text_input("Enter Amenity Name")
 
-        if st.button("Get Recommendations"):
-            recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
-            st.write(recommended_amenities)
+            if st.button("Get Recommendations"):
+                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
+                st.write(recommended_amenities)
+        elif option == "Preferences":
+            amenities_dropdown = st.selectbox("Consolidated Amenities", clean_df['consolidated_amenities'].unique())                         
+            def get_recommended_amenities(amenity):
+                recommended_amenities = recommend_amenities(amenity, cosine_sim2, clean_df)
+                if isinstance(recommended_amenities, str):
+                    display(HTML(recommended_amenities))
+                else:
+                    display(recommended_amenities)
+                st.dataframe(get_recommended_amenities(amenities_dropdown))
+                #amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'])
+                
+
+
             # Create a dropdown menu with the available amenities
-            #amenities_dropdown = Dropdown(options=clean_df['consolidated_amenities'].unique(), description='Select Amenity:')
+                #amenities_dropdown = Dropdown(options=clean_df['consolidated_amenities'].unique(), description='Select Amenity:')
+        
+        
+        elif option == "Place":
+ 
+            st.header("Place Recommendation")
+            place_name = st.text_input("Enter Place Name")
 
-    elif option == "Place":
-        st.header("Place Recommendation")
-        place_name = st.text_input("Enter Place Name")
+            if st.button("Get Recommendations"):
+                recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
+                st.write(recommended_places)
+         
 
-        if st.button("Get Recommendations"):
-            recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
-            st.write(recommended_places)
-
-    # Additional sections for the amenities tab
-    if option == "Amenities":
-        amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'].unique())
-
-        def get_recommended_amenities(amenity):
-            recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
-            if isinstance(recommended_amenities, str):
-                st.write(recommended_amenities)
-            else:
-                st.write(recommended_amenities)
-
-        get_recommended_amenities(amenities_dropdown)
+        # Additional sections for the amenities tab
+ 
 
     
     
