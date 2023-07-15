@@ -13,26 +13,46 @@ class DataCleaning:
         self.df = None
 
     def read_json_files(self, json_files):
-        # Reads multiple JSON files and concatenates them into a single DataFrame
+    # Reads multiple JSON files and concatenates them into a single DataFrame
         dfs = []
         for file in json_files:
             with open(file, encoding='utf-8') as f:
                 json_data = json.load(f)
                 df = pd.DataFrame(json_data)
                 dfs.append(df)
-        self.df = pd.concat(dfs, ignore_index=True)
+                self.df = pd.concat(dfs, ignore_index=True)
+                
+        return self.df
+
+
+    
+    def get_preview(self, df):
+        # Returns a preview of the DataFrame
+        return self.df.head()
+    
+    
+    def get_info(self, df):
+        # returns Info on the dataset
+        return self.df.info()
+    
+    def get_shape(self, df):
+        # returns shape of the dataset
+        return self.df.shape
+
 
     def drop_columns(self, columns):
         # Drops specified columns from the DataFrame
         self.df.drop(columns=columns, inplace=True)
 
-    def missing_values_percentage(self):
+    def missing_values_percentage(self, df):
         # Calculates the percentage of missing values in each column
-        return self.df.isnull().sum() / len(self.df) * 100
+        column_percentages = self.df.isnull().sum() / len(self.df) * 100
+        columns_with_missing_values = column_percentages[column_percentages > 0]
+        return columns_with_missing_values.sort_values(ascending=False)
 
     def drop_above_threshold(self, threshold):
         # Drops columns with missing values percentage above the specified threshold
-        column_percentages = self.missing_values_percentage()
+        column_percentages = self.missing_values_percentage(self.df)
         columns_with_missing_values = column_percentages[column_percentages > threshold]
         columns_to_drop = columns_with_missing_values.index.tolist()
         self.df.drop(columns=columns_to_drop, inplace=True)
@@ -161,6 +181,3 @@ class DataCleaning:
     def save_to_csv(self, file_path):
         # Saves the DataFrame to a CSV file
         self.df.to_csv(file_path, index=False)
-
-    def get_info(self):
-        self.df.info(df)
