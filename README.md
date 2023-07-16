@@ -115,14 +115,15 @@ As mentioned before included in this repository is the complete project document
 * [Write-up documentation](./writeup.docx)
 
 <p align='center'>
-    <b>File Hierarchy
-</p>
-
+    <b>File Hierarchy</b>
+    ├── africura_presentation.pdf
+    ├── Cleaner.py
     ├── Data
     │   ├── botswana.json
     │   ├── Botswana reviews.json
     │   ├── capeverde.json
     │   ├── clean_data.csv
+    │   ├── clean_df.pkl
     │   ├── compiled_data.csv
     │   ├── condensed_data.csv
     │   ├── drc.json
@@ -145,7 +146,8 @@ As mentioned before included in this repository is the complete project document
     │   ├── morocco.json
     │   ├── namibia.json
     │   ├── nigeria.json
-    │   ├── reviews_data.csv
+    │   ├── reviews.csv
+    │   ├── reviews_model_data.csv
     │   ├── rwanda.json
     │   ├── senegal.json
     │   ├── seychelles.json
@@ -153,21 +155,39 @@ As mentioned before included in this repository is the complete project document
     │   ├── southafrica.json
     │   ├── tanzania.json
     │   ├── Tanzania reviews.json
+    │   ├── tfidf_matrix2.pkl
+    │   ├── tfidf_matrix.pkl
     │   ├── uganda.json
     │   └── zambia.json
     ├── deployment
-        ├── app_data
-        │   ├── clean_data.csv
-    │   └── africura.py
+    │   ├── africura_2_0.py
+    │   ├── africura_2_1.py
+    │   ├── africura_3_0.py
+    │   ├── africura_3_1.py
+    │   ├── africura_final.py
+    │   ├── africura.py
+    │   ├── app_data
+    │   │   └── clean_data.csv
+    │   ├── RemoveOutliers.py
+    │   ├── streamlit.py
+    │   └── stream.py
     ├── LICENSE
     ├── misc_notebooks
     │   ├── dennis.ipynb
+    │   ├── ian-Copy1.ipynb
     │   ├── ian.ipynb
+    │   ├── ian_reviews_data.ipynb
     │   ├── kane.ipynb
     │   ├── kibet.ipynb
+    │   ├── my_functions.py
     │   ├── pamela.ipynb
     │   ├── Pauline.ipynb
-    │   └── rwanda.ipynb
+    │   ├── rwanda.ipynb
+    │   └── Untitled.ipynb
+    ├── modelling.ipynb
     ├── notebook.ipynb
     ├── README.md
+    ├── requirements.txt
     └── writeup.docx
+</p>
+    
