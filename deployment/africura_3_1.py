@@ -18,6 +18,7 @@ import streamlit as st
 from ipywidgets import interact_manual
 from IPython.display import display, HTML
 from ipywidgets import Dropdown
+from PIL import Image
 
 @st.cache_resource
 def load_data():
@@ -49,7 +50,7 @@ class RecommenderSystem:
         self.cosine_similarities = cosine_similarities
         self.indices = indices
         
-    def get_item_recommendations(item_index, cosine_similarities, top_n=5):
+    def get_item_recommendations(self, item_index, cosine_similarities, top_n=5):
         # Get similarity scores for the item
         item_scores = list(enumerate(cosine_similarities[item_index]))
 
@@ -60,15 +61,6 @@ class RecommenderSystem:
         top_items = item_scores[1 : top_n + 1]  # Exclude the item itself
 
         return top_items
-
-        # Get recommendations for a specific item (e.g., item with index 0)
-        item_index = 0
-        recommendations_a = get_item_recommendations(item_index, cosine_similarities)
-
-        # Print the top 5 recommendations
-        #for item_id, similarity in recommendations:
-        #print(f"Item ID: {item_id}, Similarity: {similarity}")
-
 
     def recommend_attraction(self, rating_threshold):
         # Filter the DataFrame based on the rating threshold
@@ -84,23 +76,13 @@ class RecommenderSystem:
         indices = {amen: index for index, amen in enumerate(self.clean_df['consolidated_amenities'])}
 
         # Check if the amenity exists in the dictionary
-        if selected_amenity in indices:
-            # Get the index of the amenity that matches the provided amenity
-            idx = indices[selected_amenity]
+        matching_amenities = [amen for amen in indices if selected_amenity.lower() in amen.lower()]
+        if matching_amenities:
+            # Get the indices of the matching amenities
+            indices = [indices[amen] for amen in matching_amenities]
 
-            # Get the pairwise similarity scores of all amenities with that amenity
-            sim_scores = list(enumerate(self.cosine_sim2[idx]))
-
-            # Sort the amenities based on the similarity scores
-            sim_scores.sort(key=lambda x: x[1], reverse=True)
-
-            # Get the scores of the 10 most similar amenities
-            sim_scores = sim_scores[1:11]
-
-            # Get the amenity indices
-            indices = [x for x, _ in sim_scores]
-
-            return self.clean_df.set_index('consolidated_amenities').iloc[indices][
+            # Get the recommendations for the matching amenities
+            recommendations = self.clean_df.set_index('consolidated_amenities').iloc[indices][
                 [
                     'name',
                     'country',
@@ -108,19 +90,27 @@ class RecommenderSystem:
                     'LowerPrice',
                     'UpperPrice',
                     'amenities',
-                    + 
                 ]
             ]
+
+            return recommendations
         else:
             return "Amenity not found."
-    
+
             
-    def get_recommended_amenities(amenity):
-        recommended_amenities = recommend_amenities(amenity, cosine_sim2, clean_df)
-        if isinstance(recommended_amenities, str):
-            display(HTML(recommended_amenities))
-        else:
-            display(recommended_amenities)
+        def get_recommended_amenities(self, amenity):
+            recommended_amenities = self.recommend_amenities(amenity, cosine_sim2, clean_df)
+            if isinstance(recommended_amenities, str):
+                display(HTML(recommended_amenities))
+            else:
+                display(recommended_amenities)
+                
+        def get_country_amenities(self, clean_df):
+            # Group the amenities by country
+            country_amenities = self.clean_df.groupby('country')['consolidated_amenities'].apply(list).reset_index()
+
+            return country_amenities
+
 
  
     def recommend_place(self, name, cosine_sim2, clean_df):
@@ -161,23 +151,6 @@ class RecommenderSystem:
         return recommended_places
 
 
-        
-    def get_item_recommendations(self, preference, top_n=5):
-     # Get the index of the preference
-        preference_index = self.clean_df['consolidated_amenities'].tolist().index(preference)
-
-        # Get similarity scores for the preference
-        preference_scores = list(enumerate(self.cosine_similarities[preference_index]))
-
-        # Sort preferences based on similarity scores
-        preference_scores = sorted(preference_scores, key=lambda x: x[1], reverse=True)
-
-        # Get top-N similar preferences
-        top_preferences = preference_scores[1:top_n + 1]  # Exclude the preference itself
-
-        return top_preferences
-
-
 # Load the data
 clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
 
@@ -186,62 +159,69 @@ recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_si
 
 
 def main():
-
+    # Set the CSS style
+    st.markdown("""
+        <style>
+            body {
+                background-image: Image.open("../Data/images/ui_bg.jpg");
+                background-size: cover;
+                
+            }
+        </style>
+    """, unsafe_allow_html=True)
+        
+       
     
-    menu = ['About', 'Recomenders']
+    menu = ['About', 'Recommenders']
     selection = st.sidebar.selectbox("Select Menu", menu)
     
-    # Sidebar
-    option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Place", "Preferences", "Amenities"])
+    
         
     # Add other sections using st.markdown()
     st.sidebar.subheader("About")
     st.sidebar.write("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
     
-    if selection == "About" :
+    if selection == "About":
         st.markdown("## Welcome to Africura!")
-        st.markdown("A one stop shop for all you WanderLusters. ")
+        st.markdown("A one-stop-shop for all you WanderLusters. ")
         st.write("Personalized Destination Recommendations: Utilize your recommendation system to suggest personalized travel destinations to users based on their budget constraints. Take into account factors such as customer reviews, location preferences, amenities, and residence types to offer tailored recommendations that align with their preferences.")
         st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
         st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
         map_data = {
-                    # Define the map layout
-                    'layout': go.Layout(
-                    title='Places to visit by Location',
-                    autosize=True,
-                    hovermode='closest',
-                    mapbox=dict(
-                            style='stamen-terrain',
-                            bearing=0,
-                            center=dict(lat=8, lon=20),
-                            pitch=0,
-                            zoom=2
-                        ),
+            # Define the map layout
+            'layout': go.Layout(
+                title='Places to visit by Location',
+                autosize=True,
+                hovermode='closest',
+                mapbox=dict(
+                    style='stamen-terrain',
+                    bearing=0,
+                    center=dict(lat=8, lon=20),
+                    pitch=0,
+                    zoom=2
                 ),
+            ),
 
-                    # Define the map data as a scatter plot of the coordinates
-                    'data': go.Scattermapbox(
-                    lat=clean_df['latitude'],
-                    lon=clean_df['longitude'],
-                    mode='markers',
-                    marker=dict(
-                        size=5,
-                        color=clean_df['rating'],
-                        opacity=0.8
-                        ),
-                    text=['Price: ${}'.format(i) for i in clean_df['UpperPrice']],
-                    hovertext=clean_df.apply(lambda x: f"Ranking Type: ${x['RankingType']}, Location: {x['locationString']}", axis=1),
-                        )
-                }
+            # Define the map data as a scatter plot of the coordinates
+            'data': go.Scattermapbox(
+                lat=clean_df['latitude'],
+                lon=clean_df['longitude'],
+                mode='markers',
+                marker=dict(
+                    size=5,
+                    color=clean_df['rating'],
+                    opacity=0.8
+                ),
+                text=['Price: ${}'.format(i) for i in clean_df['UpperPrice']],
+                hovertext=clean_df.apply(lambda x: f"Ranking Type: ${x['RankingType']}, Location: {x['locationString']}", axis=1),
+            )
+        }
 
-                    # Create the map figure
+        # Create the map figure
         fig = go.Figure(data=[map_data['data']], layout=map_data['layout'])
 
-                    # Show the map figure in Streamlit
+        # Show the map figure in Streamlit
         st.plotly_chart(fig, width='100%')
-        
-        
-        
         
         with st.markdown("## Contact"):
             with st.form(key='contact-form'):
@@ -262,63 +242,87 @@ def main():
         
         
         
-    if selection == "Recomenders" :    
-        st.title("Recommender System")
+    if selection == "Recommenders":
+        #st.title("Recommender System")    
+        #st.markdown("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
+
+        st.markdown("## Recommendation Section")
     
+        rating_threshold = st.number_input("Enter Rating Threshold", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
+
+        if st.button("Get Recommendations rating"):
+            recommendations = recommender.recommend_attraction(rating_threshold)
+            st.dataframe(recommendations)
+
+        place_name = st.text_input("Enter Place Name")
+
+        if st.button("Get Recommendations place"):
+            recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
+            st.write(recommended_places)
+
+        #amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'].unique())
+
+        #def get_recommended_amenities(amenity):
+         #   recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
+          #  if isinstance(recommended_amenities, str):
+           #     st.write(recommended_amenities)
+            #else:
+             #   st.write(recommended_amenities)
+
+        #get_recommended_amenities(amenities_dropdown)
+
+        amenities = clean_df['amenities'].str.split(', ').explode().unique()
+
+        if len(amenities) >= 0:
+            # Convert the amenities array to a list
+            amenities_list = amenities.tolist()
+
+            # Get the selected amenities from the multiselect box
+            selected_amenities = st.multiselect("Select Amenities", amenities_list)
+
+            # Check if any amenities are selected
+            if selected_amenities:
+                # Filter the clean_df DataFrame based on the selected amenities
+                filtered_df = clean_df[clean_df['consolidated_amenities'].str.contains('|'.join(selected_amenities))]
+
+                # Get the recommendations for the selected amenities
+                recommendations = recommender.recommend_amenities(selected_amenities[0], cosine_sim2, filtered_df)
+
+                # Display the recommendations
+                st.write(recommendations)
+            else:
+                st.write("Please select at least one amenity.")
+        else:
+            st.write("No amenities found.")
         
-        # Add other sections using st.markdown()
-        #st.sidebar.subheader("About")
-        #st.sidebar.write("Africura is a recommendation engine that provides suggestions for locations to visit in Africa based on given preferences")
-
-        # Set the CSS style
-        st.markdown("""
-            <style>
-                .st-sidebar {
-                    width: 100px;
-                }
-            </style>
-        """, unsafe_allow_html=True)
-
-        # Get the user's preferences
-        preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
-
-
-        # Recommend locations based on the user's preferences
-        if option == "Attraction":
-            rating_threshold = st.number_input("Enter Rating Threshold", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
-
-            if st.button("Get Recommendations"):
-                recommendations = recommender.recommend_attraction(rating_threshold)
-                st.dataframe(recommendations)
         
-        elif option == "Place":
- 
-            st.header("Place Recommendation")
-            place_name = st.text_input("Enter Place Name")
+        
+        amenities_data = recommender.get_country_amenities(clean_df)
 
-            if st.button("Get Recommendations"):
-                recommended_places = recommender.recommend_place(place_name, cosine_sim2, clean_df)
-                st.write(recommended_places)
- 
-        elif option == "Preferences":
-            amenities_dropdown = st.selectbox("Select Amenity:", clean_df['consolidated_amenities'].unique())
+        country = st.selectbox("Select Country", amenities_data['country'])
 
-            def get_recommended_amenities(amenity):
-                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
-                if isinstance(recommended_amenities, str):
-                    st.write(recommended_amenities)
-                else:
-                    st.write(recommended_amenities)
+        if st.button("Get Amenities"):
+            selected_amenities = amenities_data.loc[amenities_data['country'] == country, 'consolidated_amenities'].iloc[0]
 
-            get_recommended_amenities(amenities_dropdown)
-                    
-        elif option == "Amenities":      
-            amenity = st.text_input("Enter Amenity Name")
+            # Display the amenities as options
+            selected_amenities = st.multiselect("Select Amenities", selected_amenities)
 
-            if st.button("Get Recommendations"):
-                recommended_amenities = recommender.recommend_amenities(amenity, cosine_sim2, clean_df)
-                st.write(recommended_amenities)
-  
-    
+            # Check if any amenities are selected
+            if selected_amenities:
+                # Filter the clean_df DataFrame based on the selected amenities and country
+                filtered_df = clean_df[
+                    (clean_df['consolidated_amenities'].str.contains('|'.join(selected_amenities))) &
+                    (clean_df['country'] == country)
+                ]
+
+                # Get the recommendations for the selected amenities and country
+                recommendations = recommender.recommend_amenities(filtered_df, cosine_sim2)
+
+                # Display the recommendations
+                st.write(recommendations)
+            else:
+                st.write("Please select at least one amenity.")     
+        
+            
 if __name__ == "__main__":
     main()

@@ -15,6 +15,7 @@ from surprise import accuracy as sup_accuracy
 import warnings
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
+from PIL import Image
 
 
 @st.cache_resource
