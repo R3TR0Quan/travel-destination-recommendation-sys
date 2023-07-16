@@ -56,10 +56,7 @@ class RecommendationEngine:
         # Sort items based on similarity scores
         item_scores = sorted(item_scores, key=lambda x: x[1], reverse=True)
 
-        # Get top-N similar items
-        top_items = item_scores[1 : top_n + 1]  # Exclude the item itself
-
-        return top_items
+        return item_scores[1 : top_n + 1]
 
     def recommend_attraction(self, rating_threshold):
         recommendations = self.clean_df[self.clean_df['rating'] == rating_threshold][['name', 'LowerPrice', 'UpperPrice', 'amenities', 'type', 'country']]
@@ -68,7 +65,7 @@ class RecommendationEngine:
     
     def recommend_amenities(self, selected_amenity, cosine_sim2, clean_df):
         # Create a dictionary to map amenities to their indices
-        indices = {amen: index for index, amen in enumerate(self.clean_df['consolidated_amenities'])}
+        indices = {amen: index for index, amen in enumerate(self.clean_df['combined_amenities'])}
 
     def recommend_amenities(self, combined_amenities):
         indices = {title: index for index, title in enumerate(self.clean_df['combined_amenities'])}
@@ -96,12 +93,12 @@ class RecommendationEngine:
         else:
                 display(recommended_amenities)
                 
-    def get_country_amenities(self, clean_df):
-        return (
-            self.clean_df.groupby('country')['consolidated_amenities']
-            .apply(list)
-            .reset_index()
-        )
+    #def get_country_amenities(self, clean_df):
+       # return (
+         #   self.clean_df.groupby('country')['consolidated_amenities']
+         #   .apply(list)
+          #  .reset_index()
+      #  )
 
     def recommend_country(self, country):
         indices = {title: index for index, title in enumerate(self.clean_df['country'])}
@@ -131,7 +128,7 @@ class RecommendationEngine:
 clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
 
 # Create the RecommenderSystem object
-recommender = RecommendationEngine(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
+recommender = RecommendationEngine(clean_df, cosine_sim2, cosine_similarities)
 
 
 def main():
@@ -184,7 +181,7 @@ def _extracted_from_main_89():
 
     #get_recommended_amenities(amenities_dropdown)
 
-    amenities = clean_df['amenities'].str.split(', ').explode().unique()
+    amenities = clean_df['combined_amenities'].str.split(', ').explode().unique()
 
     if len(amenities) >= 0:
         # Convert the amenities array to a list
@@ -194,7 +191,7 @@ def _extracted_from_main_89():
             "Select Amenities", amenities_list
         ):
             # Filter the clean_df DataFrame based on the selected amenities
-            filtered_df = clean_df[clean_df['consolidated_amenities'].str.contains('|'.join(selected_amenities))]
+            filtered_df = clean_df[clean_df['combined_amenities'].str.contains('|'.join(selected_amenities))]
 
             # Get the recommendations for the selected amenities
             recommendations = recommender.recommend_amenities(selected_amenities[0], cosine_sim2, filtered_df)
@@ -208,19 +205,19 @@ def _extracted_from_main_89():
 
 
 
-    amenities_data = recommender.get_country_amenities(clean_df)
+    amenities_data = recommender.recommend_country(clean_df)
 
     country = st.selectbox("Select Country", amenities_data['country'])
 
     if st.button("Get Amenities"):
-        selected_amenities = amenities_data.loc[amenities_data['country'] == country, 'consolidated_amenities'].iloc[0]
+        selected_amenities = amenities_data.loc[amenities_data['country'] == country, 'combined_amenities'].iloc[0]
 
         if selected_amenities := st.multiselect(
             "Select Amenities", selected_amenities
         ):
             # Filter the clean_df DataFrame based on the selected amenities and country
             filtered_df = clean_df[
-                (clean_df['consolidated_amenities'].str.contains('|'.join(selected_amenities))) &
+                (clean_df['combined_amenities'].str.contains('|'.join(selected_amenities))) &
                 (clean_df['country'] == country)
             ]
 
@@ -278,7 +275,7 @@ def _extracted_from_main_25():
     st.markdown("<footer><p>&copy; 2023 Africura Travel Destination Recommendation System. All rights reserved.</p></footer>", unsafe_allow_html=True)     
 
 
-# TODO Rename this here and in `main`
+
 def _extracted_from_main_():
     st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
     st.markdown("### Message")
