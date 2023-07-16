@@ -59,7 +59,7 @@ class RecommendationEngine:
         return item_scores[1 : top_n + 1]
 
     def recommend_attraction(self, rating_threshold):
-        recommendations = self.clean_df[self.clean_df['rating'] == rating_threshold][['name', 'LowerPrice', 'UpperPrice', 'amenities', 'type', 'country']]
+        recommendations = self.clean_df[self.clean_df['rating'] <= rating_threshold][['name', 'LowerPrice', 'UpperPrice', 'amenities', 'type', 'country']]
         recommendations.reset_index(drop=True, inplace=True)
         return recommendations
     

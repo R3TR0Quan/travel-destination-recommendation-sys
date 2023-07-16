@@ -280,7 +280,7 @@ def main():
         """, unsafe_allow_html=True)
 
         # Get the user's preferences
-        preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
+        #preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
 
 
         # Recommend locations based on the user's preferences

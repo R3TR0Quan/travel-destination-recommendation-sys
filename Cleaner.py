@@ -44,7 +44,7 @@ class DataCleaning:
     # Reads multiple JSON files and concatenates them into a single DataFrame
         dfs = []
         for file in json_files:
-            with open(file) as f:
+            with open(file, encoding='utf-8-sig') as f:
                 json_data = json.load(f)
                 df = pd.DataFrame(json_data)
                 dfs.append(df)
@@ -56,7 +56,6 @@ class DataCleaning:
         # Returns a preview of the DataFrame
         return self.df.head()
     
-    
     def get_info(self, df):
         # returns Info on the dataset
         return self.df.info()
@@ -64,24 +63,17 @@ class DataCleaning:
     def get_shape(self, df):
         # returns shape of the dataset
         return self.df.shape
-
-
-    def drop_columns(self, columns):
+    
+    def drop_columns(self, columns, df):
         # Drops specified columns from the DataFrame
         self.df.drop(columns=columns, inplace=True)
-
+        
     def missing_values_percentage(self, df):
         # Calculates the percentage of missing values in each column
         column_percentages = self.df.isnull().sum() / len(self.df) * 100
         columns_with_missing_values = column_percentages[column_percentages > 0]
-        return columns_with_missing_values.sort_values(ascending=False)
+        return columns_with_missing_values.sort_values(ascending=False) 
 
-    def drop_above_threshold(self, threshold):
-        # Drops columns with missing values percentage above the specified threshold
-        column_percentages = self.missing_values_percentage(self.df)
-        columns_with_missing_values = column_percentages[column_percentages > threshold]
-        columns_to_drop = columns_with_missing_values.index.tolist()
-        self.df.drop(columns=columns_to_drop, inplace=True)
 
     def split_price_range(self):
         # Splits the priceRange column into LowerPrice and UpperPrice columns
@@ -207,6 +199,8 @@ class DataCleaning:
     def save_to_csv(self, file_path):
         # Saves the DataFrame to a CSV file
         self.df.to_csv(file_path, index=False)
+
+
 
 
 
