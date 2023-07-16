@@ -81,7 +81,7 @@ Here's a breakdown of aome of the main columns we used in coming up with recomme
 * `priceRange`: Price range of the item.
 
 There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
-We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project **writeup**.
+We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project [**writeup**](./writeup.docx).
 
 ## EDA
 
@@ -95,10 +95,24 @@ Some of the plots we came up with are shown below:
 ## Modelling 
 
 We built multiple models powered by different algorithms.
+These include:
+* `NMF` 
+* `Memory Based`
+* `SVD`
+* `KNNwithMean`
+* `Baseline Model`
+* `KNNBasic`
 
+The best performing ones were tuned and ensembled to produce one model however this did not exhibit better performance with 
 ## Deployment
 
 Included in the repository is a streamlit user interface that serves as the rudimentary method through which users shall interact with our model.
+
+## Additional Documentation
+
+As mentioned before included in this repository is the complete project documentation. This includes:
+* [Non-technical presentation](./africura_presentation.pdf).
+* [Write-up documentation](./writeup.docx)
 
 <p align='center'>
     <b>File Hierarchy
