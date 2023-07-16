@@ -40,7 +40,7 @@ def load_data():
 
     return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
 
-
+st.set_page_config(layout="wide")
 class RecommenderSystem:
     def __init__(self, clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices):
         self.clean_df = clean_df
@@ -105,9 +105,10 @@ class RecommenderSystem:
                     'name',
                     'country',
                     'RankingType',
-                    'amenities',
                     'LowerPrice',
                     'UpperPrice',
+                    'amenities',
+                    + 
                 ]
             ]
         else:
@@ -177,9 +178,16 @@ class RecommenderSystem:
         return top_preferences
 
 
+# Load the data
+clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
+
+# Create the RecommenderSystem object
+recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
+
+
 def main():
 
-    st.set_page_config(layout="wide")
+    
     menu = ['About', 'Recomenders']
     selection = st.sidebar.selectbox("Select Menu", menu)
     
@@ -196,6 +204,45 @@ def main():
         st.write("Personalized Destination Recommendations: Utilize your recommendation system to suggest personalized travel destinations to users based on their budget constraints. Take into account factors such as customer reviews, location preferences, amenities, and residence types to offer tailored recommendations that align with their preferences.")
         st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
         st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
+        map_data = {
+                    # Define the map layout
+                    'layout': go.Layout(
+                    title='Places to visit by Location',
+                    autosize=True,
+                    hovermode='closest',
+                    mapbox=dict(
+                            style='stamen-terrain',
+                            bearing=0,
+                            center=dict(lat=8, lon=20),
+                            pitch=0,
+                            zoom=2
+                        ),
+                ),
+
+                    # Define the map data as a scatter plot of the coordinates
+                    'data': go.Scattermapbox(
+                    lat=clean_df['latitude'],
+                    lon=clean_df['longitude'],
+                    mode='markers',
+                    marker=dict(
+                        size=5,
+                        color=clean_df['rating'],
+                        opacity=0.8
+                        ),
+                    text=['Price: ${}'.format(i) for i in clean_df['UpperPrice']],
+                    hovertext=clean_df.apply(lambda x: f"Ranking Type: ${x['RankingType']}, Location: {x['locationString']}", axis=1),
+                        )
+                }
+
+                    # Create the map figure
+        fig = go.Figure(data=[map_data['data']], layout=map_data['layout'])
+
+                    # Show the map figure in Streamlit
+        st.plotly_chart(fig, width='100%')
+        
+        
+        
+        
         with st.markdown("## Contact"):
             with st.form(key='contact-form'):
                 st.markdown("Any queries? Please fill out the form below and we will get back to you as soon as possible.")
@@ -233,13 +280,8 @@ def main():
         """, unsafe_allow_html=True)
 
         # Get the user's preferences
-        preferences = st.sidebar.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
+        preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
 
-        # Load the data
-        clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices = load_data()
-
-        # Create the RecommenderSystem object
-        recommender = RecommenderSystem(clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices)
 
         # Recommend locations based on the user's preferences
         if option == "Attraction":

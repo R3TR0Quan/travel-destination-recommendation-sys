@@ -81,7 +81,7 @@ Here's a breakdown of aome of the main columns we used in coming up with recomme
 * `priceRange`: Price range of the item.
 
 There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
-We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project **writeup**.
+We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project [**writeup**](./writeup.docx).
 
 ## EDA
 
@@ -95,20 +95,37 @@ Some of the plots we came up with are shown below:
 ## Modelling 
 
 We built multiple models powered by different algorithms.
+These include:
+* `NMF` 
+* `Memory Based`
+* `SVD`
+* `KNNwithMean`
+* `Baseline Model`
+* `KNNBasic`
 
+The best performing ones were tuned and ensembled to produce one model however this did not exhibit better performance with 
 ## Deployment
 
 Included in the repository is a streamlit user interface that serves as the rudimentary method through which users shall interact with our model.
 
+## Additional Documentation
+
+As mentioned before included in this repository is the complete project documentation. This includes:
+* [Non-technical presentation](./africura_presentation.pdf).
+* [Write-up documentation](./writeup.docx)
+
 <p align='center'>
-    <b>File Hierarchy
+    <b>File Hierarchy</b>
 </p>
 
+    ├── africura_presentation.pdf
+    ├── Cleaner.py
     ├── Data
     │   ├── botswana.json
     │   ├── Botswana reviews.json
     │   ├── capeverde.json
     │   ├── clean_data.csv
+    │   ├── clean_df.pkl
     │   ├── compiled_data.csv
     │   ├── condensed_data.csv
     │   ├── drc.json
@@ -131,7 +148,8 @@ Included in the repository is a streamlit user interface that serves as the rudi
     │   ├── morocco.json
     │   ├── namibia.json
     │   ├── nigeria.json
-    │   ├── reviews_data.csv
+    │   ├── reviews.csv
+    │   ├── reviews_model_data.csv
     │   ├── rwanda.json
     │   ├── senegal.json
     │   ├── seychelles.json
@@ -139,21 +157,37 @@ Included in the repository is a streamlit user interface that serves as the rudi
     │   ├── southafrica.json
     │   ├── tanzania.json
     │   ├── Tanzania reviews.json
+    │   ├── tfidf_matrix2.pkl
+    │   ├── tfidf_matrix.pkl
     │   ├── uganda.json
     │   └── zambia.json
     ├── deployment
-        ├── app_data
-        │   ├── clean_data.csv
-    │   └── africura.py
+    │   ├── africura_2_0.py
+    │   ├── africura_2_1.py
+    │   ├── africura_3_0.py
+    │   ├── africura_3_1.py
+    │   ├── africura_final.py
+    │   ├── africura.py
+    │   ├── app_data
+    │   │   └── clean_data.csv
+    │   ├── RemoveOutliers.py
+    │   ├── streamlit.py
+    │   └── stream.py
     ├── LICENSE
     ├── misc_notebooks
     │   ├── dennis.ipynb
+    │   ├── ian-Copy1.ipynb
     │   ├── ian.ipynb
+    │   ├── ian_reviews_data.ipynb
     │   ├── kane.ipynb
     │   ├── kibet.ipynb
+    │   ├── my_functions.py
     │   ├── pamela.ipynb
     │   ├── Pauline.ipynb
-    │   └── rwanda.ipynb
+    │   ├── rwanda.ipynb
+    │   └── Untitled.ipynb
+    ├── modelling.ipynb
     ├── notebook.ipynb
     ├── README.md
+    ├── requirements.txt
     └── writeup.docx
