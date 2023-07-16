@@ -445,3 +445,54 @@ def recommend_country(country, cosine_sim2, cosine_similarities, data):
 
     
 
+class RecommendationEngine:
+    def __init__(self, cosine_similarities, cosine_sim2, clean_df):
+        self.cosine_similarities = cosine_similarities
+        self.cosine_sim2 = cosine_sim2
+        self.clean_df = clean_df
+
+    def recommend_place(self, name):
+        indices = {title: index for index, title in enumerate(self.clean_df['name'])}
+        idx = indices[name]
+        sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
+        sim_scores.sort(key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        indices = [x for x, _ in sim_scores]
+        return self.clean_df.set_index('name').iloc[indices][
+            ['country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']
+        ]
+
+    def recommend_amenities(self, combined_amenities):
+        indices = {title: index for index, title in enumerate(self.clean_df['combined_amenities'])}
+        idx = indices[combined_amenities]
+        sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
+        sim_scores.sort(key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        indices = [x for x, _ in sim_scores]
+        return self.clean_df.set_index('combined_amenities').iloc[indices][
+            [
+                'name',
+                'country',
+                'RankingType',
+                'subcategories',
+                'LowerPrice',
+                'UpperPrice',
+            ]
+        ]
+
+    def recommend_attraction(self, rating_threshold):
+        recommendations = self.clean_df[self.clean_df['rating'] == rating_threshold][['name', 'LowerPrice', 'UpperPrice', 'amenities', 'type', 'country']]
+        recommendations.reset_index(drop=True, inplace=True)
+        return recommendations
+
+    def recommend_country(self, country):
+        indices = {title: index for index, title in enumerate(self.clean_df['country'])}
+        idx = indices[country]
+        sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
+        sim_scores.sort(key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:1000]
+        indices = [x for x, _ in sim_scores]
+        recommended_country = self.clean_df.set_index('country').iloc[indices][['name', 'city', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']]
+
+        filtered_recommendations = recommended_country[recommended_country.index == country]
+        return pd.DataFrame(filtered_recommendations)
