@@ -117,7 +117,8 @@ As mentioned before included in this repository is the complete project document
 <p align='center'>
     <b>File Hierarchy</b>
 </p>
-        ├── africura_presentation.pdf
+
+    ├── africura_presentation.pdf
     ├── Cleaner.py
     ├── Data
     │   ├── botswana.json
