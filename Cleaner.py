@@ -44,7 +44,7 @@ class DataCleaning:
     # Reads multiple JSON files and concatenates them into a single DataFrame
         dfs = []
         for file in json_files:
-            with open(file, encoding='utf-8-sig') as f:
+            with open(file, encoding='utf-8', errors='ignore') as f:
                 json_data = json.load(f)
                 df = pd.DataFrame(json_data)
                 dfs.append(df)
@@ -73,8 +73,14 @@ class DataCleaning:
         column_percentages = self.df.isnull().sum() / len(self.df) * 100
         columns_with_missing_values = column_percentages[column_percentages > 0]
         return columns_with_missing_values.sort_values(ascending=False) 
-
-
+    
+    def drop_above_threshold(self, threshold):
+        # Drops columns with missing values percentage above the specified threshold
+        column_percentages = self.missing_values_percentage(self.df)
+        columns_with_missing_values = column_percentages[column_percentages > threshold]
+        columns_to_drop = columns_with_missing_values.index.tolist()
+        self.df.drop(columns=columns_to_drop, inplace=True)
+        
     def split_price_range(self):
         # Splits the priceRange column into LowerPrice and UpperPrice columns
         self.df[['LowerPrice', 'UpperPrice']] = self.df['priceRange'].str.replace('KES', '').str.split(' - ', expand=True)
@@ -149,7 +155,7 @@ class DataCleaning:
 
     def clean_ratings(self):
         # Replaces missing values in the rating column with 0
-        self.df['rating'].fillna(0, inplace=True)
+        self.df['rating'].fillna(5, inplace=True)
 
     def clean_review_tags(self):
         # Cleans up the reviewTags column by extracting the text values
@@ -172,8 +178,9 @@ class DataCleaning:
 
     def clean_subcategories(self):
         # Formats the subcategories column to have consistent formatting
-        self.df['subcategories'] = self.df['subcategories'].apply(lambda x: ', '.join(['{:.2f}'.format(i) if isinstance(i, (float, int)) else str(i) for i in x]) if isinstance(x, (list, tuple)) else x)
+        self.df.loc[:,'subcategories'] = self.df['subcategories'].apply(lambda x: ', '.join(['{:.2f}'.format(i) if isinstance(i, (float, int)) else str(i) for i in x]) if isinstance(x, (list, tuple)) else x)
         self.df.loc[self.df['type'] == 'VACATION_RENTAL', 'subcategories'] = self.df.loc[self.df['type'] == 'VACATION_RENTAL', 'subcategories'].fillna('Specialty Lodging')
+
 
     def drop_missing_values(self, columns):
         # Drops rows with missing values in specified columns

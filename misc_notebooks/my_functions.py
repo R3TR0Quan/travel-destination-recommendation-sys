@@ -180,7 +180,7 @@ class DataCleaning:
 
     def clean_subcategories(self):
         # Formats the subcategories column to have consistent formatting
-        self.df['subcategories'] = self.df['subcategories'].apply(lambda x: ', '.join(['{:.2f}'.format(i) if isinstance(i, (float, int)) else str(i) for i in x]) if isinstance(x, (list, tuple)) else x)
+        self.df.loc[:,'subcategories'] = self.df['subcategories'].apply(lambda x: ', '.join(['{:.2f}'.format(i) if isinstance(i, (float, int)) else str(i) for i in x]) if isinstance(x, (list, tuple)) else x)
         self.df.loc[self.df['type'] == 'VACATION_RENTAL', 'subcategories'] = self.df.loc[self.df['type'] == 'VACATION_RENTAL', 'subcategories'].fillna('Specialty Lodging')
 
     def drop_missing_values(self, columns):

@@ -168,3 +168,4 @@ Data/reviews_data.csv
 Data/.cosine_sim2.pkl
 Data/.cosine_similarities.pkl
 .engine.pkl
+.reviews.csv
