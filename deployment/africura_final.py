@@ -24,20 +24,20 @@ from PIL import Image
 @st.cache_resource
 def load_data():
     # Load the clean_df DataFrame
-    with open(r'../data/clean_df.pkl', 'rb') as f:
+    with open(r'Data/clean_df.pkl', 'rb') as f:
         clean_df = pickle.load(f)
 
     # Load the pickled files
-    with open(r'../data/tfidf_matrix2.pkl', 'rb') as f:
+    with open(r'Data/tfidf_matrix2.pkl', 'rb') as f:
         tfidfv_matrix2 = pickle.load(f)
 
-    with open(r'../data/cosine_sim2.pkl', 'rb') as f:
+    with open(r'Data/cosine_sim2.pkl', 'rb') as f:
         cosine_sim2 = pickle.load(f)
 
-    with open(r'../data/cosine_similarities.pkl', 'rb') as f:
+    with open(r'Data/cosine_similarities.pkl', 'rb') as f:
         cosine_similarities = pickle.load(f)
 
-    with open(r'../data/.indices.pkl', 'rb') as f:
+    with open(r'Data/.indices.pkl', 'rb') as f:
         indices = pickle.load(f)
 
     return clean_df, tfidfv_matrix2, cosine_sim2, cosine_similarities, indices
@@ -256,13 +256,13 @@ def main():
         # Add header
         st.markdown("<h1 style='color: rgba(3, 3, 3, 6)'>Welcome to Africura</h1>", unsafe_allow_html=True)
         
-        st.markdown("##### A one stop shop for all you WanderLusters. ")
+        st.markdown("##### A one-stop shop for all you WanderLusters. ")
         #st.write("## Africa Travel Recommendation System")
         
         
-        st.write("This recommendation system uses machine learning to recommend places to visit in Africa. The system takes into account a user's interests, budget, and travel dates to generate personalized recommendations.")
-        st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
-        st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
+        st.write("This recommendation system uses machine learning to recommend places to visit in Africa. The system takes into account a user's interests, and budget to generate recommendations.")
+        # st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
+        # st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
         map_data = {
                     # Define the map layout
                     'layout': go.Layout(
