@@ -102,7 +102,7 @@ Some of the plots we came up with are shown below:
 <p align='center'>
     <img src="Data/images/Columnstoplot.png" alt="columns plot"/>
     <img src="Data/images/top_10_subcategories_individually.png" alt="top_10_subcategories_individually"/>
-</p> --!>
+</p> -->
 
 ## Modelling 
 
@@ -129,8 +129,7 @@ As mentioned before included in this repository is the complete project document
 <p align='center'>
     <b>File Hierarchy</b>
 </p>
-
-    .
+    
     ├── africura_presentation.pdf
     ├── Africura  presentation.pdf
     ├── Africura  presentation.ppsx
