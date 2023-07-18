@@ -130,7 +130,11 @@ As mentioned before included in this repository is the complete project document
     <b>File Hierarchy</b>
 </p>
 
+    .
     ├── africura_presentation.pdf
+    ├── Africura  presentation.pdf
+    ├── Africura  presentation.ppsx
+    ├── Africura  presentation.pptx
     ├── Cleaner.py
     ├── Data
     │   ├── botswana.json
@@ -140,6 +144,8 @@ As mentioned before included in this repository is the complete project document
     │   ├── clean_df.pkl
     │   ├── compiled_data.csv
     │   ├── condensed_data.csv
+    │   ├── cosine_sim2.pkl
+    │   ├── cosine_similarities.pkl
     │   ├── drc.json
     │   ├── DRC reviews.json
     │   ├── egypt.json
@@ -148,6 +154,20 @@ As mentioned before included in this repository is the complete project document
     │   ├── ghana.json
     │   ├── images
     │   │   ├── Columnstoplot.png
+    │   │   ├── gallery
+    │   │   │   ├── Camping Time.jpeg
+    │   │   │   ├── Elephants in the Serengeti.jpeg
+    │   │   │   ├── elephants.jpeg
+    │   │   │   ├── elephants on the road.jpeg
+    │   │   │   ├── flamingos.jpeg
+    │   │   │   ├── Hanned  Pilau.jpeg
+    │   │   │   ├── Poolside chill spot.jpeg
+    │   │   │   ├── ranch houses.jpeg
+    │   │   │   ├── Sunny days.jpeg
+    │   │   │   ├── sunrise sunset.jpeg
+    │   │   │   ├── wildbeasts 1.jpeg
+    │   │   │   ├── wildbeasts.jpeg
+    │   │   │   └── zebras.jpeg
     │   │   ├── map.png
     │   │   ├── multicollinearity.png
     │   │   ├── readme_banner.jpg
@@ -182,6 +202,7 @@ As mentioned before included in this repository is the complete project document
     │   ├── africura.py
     │   ├── app_data
     │   │   └── clean_data.csv
+    │   ├── Cleaner.py
     │   ├── RemoveOutliers.py
     │   ├── streamlit.py
     │   └── stream.py
