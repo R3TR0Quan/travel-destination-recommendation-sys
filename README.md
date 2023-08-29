@@ -61,7 +61,7 @@ This project followed the CRISP-DM process. The CRISP-DM process is a data minin
 
 * To run the app locally run the following on terminal:
     ```
-    streamlit run deployment/africura.py
+    streamlit run deployment/africura_final.py
     ```
 ## Our Data
 
