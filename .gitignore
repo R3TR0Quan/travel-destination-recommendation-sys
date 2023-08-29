@@ -169,3 +169,11 @@ Data/.cosine_sim2.pkl
 Data/.cosine_similarities.pkl
 .engine.pkl
 .reviews.csv
+deployment/africura.py
+deployment/africura_2_0.py
+deployment/africura_2_1.py
+deployment/africura_3_0.py
+deployment/africura_3_1.py
+deployment/stream.py
+deployment/streamlit.py
+misc_notebooks

@@ -143,13 +143,22 @@ class RecommendationEngine:
             return f"No recommendations found for {combined_amenities}."
 
 
-    def recommend_amenities(self, amenities, cosine_similarities, cosine_sim2):
-        indices = {title: index for index, title in enumerate(self.clean_df['amenities'])}
-        idx = indices[amenities]
+    def recommend_amenities(self, combined_amenities):
+        indices = {title: index for index, title in enumerate(self.clean_df['combined_amenities'])}
+        idx = indices[combined_amenities]
         sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
         sim_scores.sort(key=lambda x: x[1], reverse=True)
         sim_scores = sim_scores[1:11]
         indices = [x for x, _ in sim_scores]
+        return self.clean_df.set_index('combined_amenities').iloc[indices][
+            [
+                'name',
+                'country',
+                'RankingType',
+                'subcategories',
+                'LowerPrice',
+                'UpperPrice',
+            ]
         return self.clean_df.set_index('amenities').iloc[indices][
             ['name', 'country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']
         ].astype({'LowerPrice': int, 'UpperPrice': int})
@@ -289,7 +298,7 @@ def main():
                         opacity=0.8
                         ),
                     text=['Price: ${}'.format(i) for i in clean_df['UpperPrice']],
-                    hovertext=clean_df.apply(lambda x: f"Ranking Type: ${x['RankingType']}, Location: {x['locationString']}", axis=1),
+                    hovertext=clean_df.apply(lambda x: f"Ranking Type: ${x['RankingType']}, Location: {x['Location']}", axis=1),
                         )
                 }
 
@@ -368,7 +377,7 @@ def main():
             st.write(recommended_subcategory)
 
        
-        amenities = clean_df['amenities'].str.split(', ').explode().unique()
+        amenities = clean_df['combined_amenities'].str.split(', ').explode().unique()
 
         if len(amenities) >= 0:
             # Convert the amenities array to a list
@@ -378,7 +387,7 @@ def main():
                 "Select Amenities", amenities_list
             ):
                 # Filter the clean_df DataFrame based on the selected amenities
-                filtered_df = clean_df[clean_df['amenities'].str.contains('|'.join(selected_amenities))]
+                filtered_df = clean_df[clean_df['combined_amenities'].str.contains('|'.join(selected_amenities))]
 
                 # Get the recommendations for the selected amenities
                 recommendations = recommender.select_amenities(selected_amenities[0], cosine_sim2, cosine_similarities)
@@ -442,7 +451,7 @@ def main():
             else:
                 st.markdown("No files found in the gallery.")
 
-        gallery_files = glob.glob("../Data/images/gallery/*.*")  # Update the file path accordingly
+        gallery_files = glob.glob("Data/images/gallery/*.*")  # Update the file path accordingly
         gallery(gallery_files)
 
         with st.form(key='gallery-form'):
@@ -459,7 +468,7 @@ def main():
                 else:
                     file_type = "image"
 
-                file_path = f"../Data/images/gallery/{file_name}.{file_extension}"
+                file_path = f"Data/images/gallery/{file_name}.{file_extension}"
                 with open(file_path, "wb") as f:
                     f.write(file.read())
 
