@@ -33,6 +33,18 @@ Our main aim as AfricuraAI is to develop a machine learning model i.e. recommend
 
 The goal is to build a machine learning model that can accurately predict hotel ratings based on customer reviews, budget constraints, specific locations, and the type of residence. The model will help users make informed decisions when selecting hotels by considering their preferences and constraints.
 
+## Project Overview
+
+This project followed the CRISP-DM process. The CRISP-DM process is a data mining process model that describes commonly used approaches that data mining experts use to tackle problems. The CRISP-DM process is divided into six phases; Business Understanding, Data Understanding, Data Preparation, Modelling, Evaluation, and Deployment. The following is a brief description of each phase:
+
+- **Business Understanding**: Exploring the business reasons for our data mining effort and what the company hopes to gain from the project.
+- **Data Understanding**: The datasets we utilized comprised of json files scraped from tripadvisor.
+- **Data Preparation**: It mainly involved; selecting the data to discover the columns to be used, cleaning the data to correct and remove erroneous values, formatting the data to effectively perform mathematical operations and integrating the datasets to create a merged dataset for effective analysis.
+- **Exploratory Data Analysis**: The goal of this procedure is to summarize the main characteristics of the dataset, which is often done visually.
+- **Modelling**: To further support and provide insight we built a content-based system.
+- **Evaluation**: Mean Absolute Error abd Root Mean Squared Error were used to measure the average of absolute deviance between actual and predicted ratings given by users.
+- **Recommendation and Conclusion**: It mainly involved interpreting our project findings, offering opinions based on the findings, proposing a solution to the gap discovered in the research that needs to be filled, and the next steps to be undertaken in future analysis.
+
 ## Setup Instructions
 
 * Install the required packages using pip:
@@ -82,7 +94,7 @@ Here's a breakdown of aome of the main columns we used in coming up with recomme
 
 There were a lot more columns in the data we scraped such as `localname`, `cuisine` and `email` that were dropped.
 We also conducted feature engineering on some columns to capture more information. All this is well documented in the included project [**writeup**](./writeup.docx).
-
+<!--
 ## EDA
 
 We conducted some EDA that yielded us some domain knowledge we could use to inform future steps and modelling
@@ -90,7 +102,7 @@ Some of the plots we came up with are shown below:
 <p align='center'>
     <img src="Data/images/Columnstoplot.png" alt="columns plot"/>
     <img src="Data/images/top_10_subcategories_individually.png" alt="top_10_subcategories_individually"/>
-</p>
+</p> -->
 
 ## Modelling 
 
@@ -117,8 +129,11 @@ As mentioned before included in this repository is the complete project document
 <p align='center'>
     <b>File Hierarchy</b>
 </p>
-
+    
     ├── africura_presentation.pdf
+    ├── Africura  presentation.pdf
+    ├── Africura  presentation.ppsx
+    ├── Africura  presentation.pptx
     ├── Cleaner.py
     ├── Data
     │   ├── botswana.json
@@ -128,6 +143,8 @@ As mentioned before included in this repository is the complete project document
     │   ├── clean_df.pkl
     │   ├── compiled_data.csv
     │   ├── condensed_data.csv
+    │   ├── cosine_sim2.pkl
+    │   ├── cosine_similarities.pkl
     │   ├── drc.json
     │   ├── DRC reviews.json
     │   ├── egypt.json
@@ -136,6 +153,20 @@ As mentioned before included in this repository is the complete project document
     │   ├── ghana.json
     │   ├── images
     │   │   ├── Columnstoplot.png
+    │   │   ├── gallery
+    │   │   │   ├── Camping Time.jpeg
+    │   │   │   ├── Elephants in the Serengeti.jpeg
+    │   │   │   ├── elephants.jpeg
+    │   │   │   ├── elephants on the road.jpeg
+    │   │   │   ├── flamingos.jpeg
+    │   │   │   ├── Hanned  Pilau.jpeg
+    │   │   │   ├── Poolside chill spot.jpeg
+    │   │   │   ├── ranch houses.jpeg
+    │   │   │   ├── Sunny days.jpeg
+    │   │   │   ├── sunrise sunset.jpeg
+    │   │   │   ├── wildbeasts 1.jpeg
+    │   │   │   ├── wildbeasts.jpeg
+    │   │   │   └── zebras.jpeg
     │   │   ├── map.png
     │   │   ├── multicollinearity.png
     │   │   ├── readme_banner.jpg
@@ -170,6 +201,7 @@ As mentioned before included in this repository is the complete project document
     │   ├── africura.py
     │   ├── app_data
     │   │   └── clean_data.csv
+    │   ├── Cleaner.py
     │   ├── RemoveOutliers.py
     │   ├── streamlit.py
     │   └── stream.py
