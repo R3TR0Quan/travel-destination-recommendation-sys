@@ -28,13 +28,13 @@ def load_data():
         clean_df = pickle.load(f)
 
     # Load the pickled files
-    with open(r'Data/tfidf_matrix2.pkl', 'rb') as f:
+    with open(r'Data/.tfidf_matrix2.pkl', 'rb') as f:
         tfidfv_matrix2 = pickle.load(f)
 
-    with open(r'Data/cosine_sim2.pkl', 'rb') as f:
+    with open(r'Data/.cosine_sim2.pkl', 'rb') as f:
         cosine_sim2 = pickle.load(f)
 
-    with open(r'Data/cosine_similarities.pkl', 'rb') as f:
+    with open(r'Data/.cosine_similarities.pkl', 'rb') as f:
         cosine_similarities = pickle.load(f)
 
     with open(r'Data/.indices.pkl', 'rb') as f:
@@ -128,29 +128,29 @@ class RecommendationEngine:
             ['country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']
         ].astype({'LowerPrice': int, 'UpperPrice': int})
 
-    def select_amenities(self, combined_amenities, cosine_similarities, cosine_sim2):
-        indices = {title: index for index, title in enumerate(self.clean_df['combined_amenities'])}
+    def select_amenities(self, amenities, cosine_similarities, cosine_sim2):
+        indices = {title: index for index, title in enumerate(self.clean_df['amenities'])}
 
         # Check if the combined_amenities exists in the indices dictionary
-        if combined_amenities in indices:
-            idx = indices[combined_amenities]
+        if amenities in indices:
+            idx = indices[amenities]
             sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
             sim_scores.sort(key=lambda x: x[1], reverse=True)
             sim_scores = sim_scores[1:11]
             indices = [x for x, _ in sim_scores]
-            return self.clean_df.set_index('combined_amenities').iloc[indices][['name', 'country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']]
+            return self.clean_df.set_index('amenities').iloc[indices][['name', 'country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']]
         else:
-            return f"No recommendations found for {combined_amenities}."
+            return f"No recommendations found for {amenities}."
 
 
-    def recommend_amenities(self, combined_amenities):
-        indices = {title: index for index, title in enumerate(self.clean_df['combined_amenities'])}
+    def recommend_amenities(combined_amenities, cosine_sim2, cosine_similarity, clean_df):
+        indices = {title: index for index, title in enumerate(clean_df['combined_amenities'])}
         idx = indices[combined_amenities]
-        sim_scores = list(enumerate(np.dot(self.cosine_sim2[idx], self.cosine_similarities)))
+        sim_scores = list(enumerate(np.dot(cosine_sim2[idx], cosine_similarities)))
         sim_scores.sort(key=lambda x: x[1], reverse=True)
         sim_scores = sim_scores[1:11]
         indices = [x for x, _ in sim_scores]
-        return self.clean_df.set_index('combined_amenities').iloc[indices][
+        return clean_df.set_index('combined_amenities').iloc[indices][
             [
                 'name',
                 'country',
@@ -159,8 +159,6 @@ class RecommendationEngine:
                 'LowerPrice',
                 'UpperPrice',
             ]
-        return self.clean_df.set_index('amenities').iloc[indices][
-            ['name', 'country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']
         ].astype({'LowerPrice': int, 'UpperPrice': int})
         
     
@@ -221,21 +219,6 @@ def main():
     
     selection = st.sidebar.selectbox("Select Menu", menu)
     
-    #if selection == "About":
-       # _extracted_from_main_25()
-    #if selection == "Recommenders":
-       # _extracted_from_main_89()  
-        
-    # Set the CSS style
-    #st.markdown(
-     #   """<style>
-          #  body {
-          #      background-image: Image.open("../Data/images/ui_bg.jpg");
-          #      background-size: cover;            
-          #  }
-        #</style>"""
-    #, unsafe_allow_html=True)
-    
 
 
 
@@ -254,10 +237,7 @@ def main():
         create_account()
           
     
-    # Sidebar
-    #option = st.sidebar.radio("Select Recommendation Type", ["Attraction", "Place", "Preferences", "Amenities"])
    
-#def _extracted_from_main_25():
     if selection == "About" :
         with st.sidebar.expander(""):
             pass
@@ -266,12 +246,12 @@ def main():
         st.markdown("<h1 style='color: rgba(3, 3, 3, 6)'>Welcome to Africura</h1>", unsafe_allow_html=True)
         
         st.markdown("##### A one-stop shop for all you WanderLusters. ")
-        #st.write("## Africa Travel Recommendation System")
         
         
-        st.write("This recommendation system uses machine learning to recommend places to visit in Africa. The system takes into account a user's interests, and budget to generate recommendations.")
-        # st.write("Top Destinations in Africa: Analyze the data from your system to identify the top tourist destinations in Africa based on customer ratings, popularity, and positive reviews. Highlight these destinations to attract users and showcase the most sought-after locations.") 
-        # st.write("Customer Loyalty and Engagement: Leverage your recommendation system to foster customer loyalty and encourage repeat customers. Provide incentives or rewards for users who book multiple trips or engage with your platform frequently. Offer personalized promotions or discounts for their preferred destinations to enhance customer engagement and satisfaction. Continuous Improvement: Collect user information and feedback to improve the recommendations in the long run. Implement mechanisms to gather user reviews and ratings for destinations they have visited through your system. Utilize this feedback to refine your recommendation algorithms, enhance the accuracy of predictions, and provide even better suggestions to future users.") 
+        
+        st.write("<h6 style='color: Hex(#FFFFFF)'>This recommendation system uses machine learning to recommend places to visit in Africa. The system takes into account a user's interests, and budget to generate recommendations.</h1>", unsafe_allow_html=True)
+     
+        
         map_data = {
                     # Define the map layout
                     'layout': go.Layout(
@@ -330,20 +310,7 @@ def main():
             pass
         # Add header
         st.markdown("<h1 style='color: rgba(3, 3, 3, 6)'>Africura Recomender</h1>", unsafe_allow_html=True)
-        #st.title("Recommender System")
-    
-        # Set the CSS style
-        #st.markdown("""
-            #<style>
-                #.st-sidebar {
-                 #   width: 100px;
-                #}
-            #</style>
-        #""", unsafe_allow_html=True)
-
-        # Get the user's preferences
-        #preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
-
+        
 
         # Recommend locations based on the user's preferences
         st.header("Attraction Recommendation")
@@ -451,7 +418,7 @@ def main():
             else:
                 st.markdown("No files found in the gallery.")
 
-        gallery_files = glob.glob("Data/images/gallery/*.*")  # Update the file path accordingly
+        gallery_files = glob.glob("Data/images/gallery/*.*")  
         gallery(gallery_files)
 
         with st.form(key='gallery-form'):
@@ -465,8 +432,8 @@ def main():
                     file_extension = file.name.split(".")[-1]
                     if file_extension == "mp4":
                         file_type = "video"
-                else:
-                    file_type = "image"
+                    else:
+                        file_type = "image"
 
                 file_path = f"Data/images/gallery/{file_name}.{file_extension}"
                 with open(file_path, "wb") as f:
