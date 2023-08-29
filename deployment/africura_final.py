@@ -159,6 +159,8 @@ class RecommendationEngine:
                 'LowerPrice',
                 'UpperPrice',
             ]
+        return self.clean_df.set_index('amenities').iloc[indices][
+            ['name', 'country', 'RankingType', 'subcategories', 'LowerPrice', 'UpperPrice']
         ].astype({'LowerPrice': int, 'UpperPrice': int})
         
     
@@ -328,7 +330,20 @@ def main():
             pass
         # Add header
         st.markdown("<h1 style='color: rgba(3, 3, 3, 6)'>Africura Recomender</h1>", unsafe_allow_html=True)
-        
+        #st.title("Recommender System")
+    
+        # Set the CSS style
+        #st.markdown("""
+            #<style>
+                #.st-sidebar {
+                 #   width: 100px;
+                #}
+            #</style>
+        #""", unsafe_allow_html=True)
+
+        # Get the user's preferences
+        #preferences = st.multiselect("What are your preferences?", ["Hotel", "Restaurant", "Culture", "Specialty Lodging", "Bed and Breakfast","Pool", "Adventure"])
+
 
         # Recommend locations based on the user's preferences
         st.header("Attraction Recommendation")
