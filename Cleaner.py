@@ -296,7 +296,7 @@ class PerformanceMetrics:
         print(f"Precision: {self.precision:.2f}")
         print(f"Recall: {self.recall:.2f}")
 
-clean_df = pd.read_csv(r"Data\clean_data.csv")
+clean_df = pd.read_csv("Data/clean_data.csv")
 
 # creating a relevant columns from the above dataset 
 vectorization_columns = clean_df[['name', 'subcategories', 'amenities']]
